@@ -1,0 +1,264 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:NBTReborn.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="1100" d:DesignHeight="700"
+        x:Class="NBTReborn.Views.MainWindow"
+        x:DataType="vm:MainViewModel"
+        Icon="/Assets/box.png"
+        Title="NBTReborn — Modern Cross-Platform NBT Explorer">
+
+    <Window.Styles>
+        <Style Selector="Button.toolbtn">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="4"/>
+            <Setter Property="CornerRadius" Value="3"/>
+            <Setter Property="Width" Value="28"/>
+            <Setter Property="Height" Value="28"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+        </Style>
+        <Style Selector="Button.toolbtn:pointerover /template/ ContentPresenter">
+            <Setter Property="Background" Value="{DynamicResource SystemControlHighlightListLowBrush}"/>
+        </Style>
+        <Style Selector="Button.toolbtn Image">
+            <Setter Property="Width" Value="16"/>
+            <Setter Property="Height" Value="16"/>
+        </Style>
+        <Style Selector="Separator.toolbarSep">
+            <Setter Property="Margin" Value="4,2"/>
+            <Setter Property="Width" Value="1"/>
+            <Setter Property="Height" Value="20"/>
+            <Setter Property="Background" Value="{DynamicResource SystemControlForegroundBaseLowBrush}"/>
+        </Style>
+    </Window.Styles>
+
+    <Grid RowDefinitions="Auto,Auto,Auto,*,Auto">
+        <!-- 1. Menu Bar -->
+        <Menu Grid.Row="0">
+            <MenuItem Header="_File">
+                <MenuItem Header="_Open..." Click="OpenFile_Click" InputGesture="Ctrl+O"/>
+                <MenuItem Header="Open _Folder..." Click="OpenFolder_Click" InputGesture="Ctrl+Shift+O"/>
+                <MenuItem Header="Open Minecraft Save Folder" Click="OpenMinecraftSaveFolder_Click"/>
+                <Separator/>
+                <MenuItem Header="_Save" Click="Save_Click" InputGesture="Ctrl+S"/>
+                <MenuItem Header="_Refresh" Click="Refresh_Click" InputGesture="F5"/>
+                <Separator/>
+                <MenuItem Header="_Exit" Click="Exit_Click" InputGesture="Alt+F4"/>
+            </MenuItem>
+            <MenuItem Header="_Edit">
+                <MenuItem Header="Cu_t" Click="Cut_Click" InputGesture="Ctrl+X"/>
+                <MenuItem Header="_Copy" Click="Copy_Click" InputGesture="Ctrl+C"/>
+                <MenuItem Header="_Paste" Click="Paste_Click" InputGesture="Ctrl+V"/>
+                <Separator/>
+                <MenuItem Header="_Rename" Click="Rename_Click" InputGesture="Ctrl+R"/>
+                <MenuItem Header="_Edit Value" Click="EditValue_Click" InputGesture="Ctrl+E"/>
+                <MenuItem Header="_Delete" Click="Delete_Click" InputGesture="Delete"/>
+                <Separator/>
+                <MenuItem Header="Move _Up" Click="MoveUp_Click" InputGesture="Ctrl+Up"/>
+                <MenuItem Header="Move Dow_n" Click="MoveDown_Click" InputGesture="Ctrl+Down"/>
+            </MenuItem>
+            <MenuItem Header="_Search">
+                <MenuItem Header="_Find..." Click="FocusSearchBox_Click" InputGesture="Ctrl+F"/>
+                <MenuItem Header="Find _Next" Click="FindNext_Click" InputGesture="F3"/>
+            </MenuItem>
+            <MenuItem Header="_Help">
+                <MenuItem Header="_About NBTReborn" Click="About_Click"/>
+            </MenuItem>
+        </Menu>
+
+        <!-- 2. Full Toolbar Matching Classic NBTExplorer -->
+        <Border Grid.Row="1" Background="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"
+                BorderBrush="{DynamicResource SystemControlForegroundBaseLowBrush}" BorderThickness="0,0,0,1"
+                Padding="4,2">
+            <WrapPanel Orientation="Horizontal" VerticalAlignment="Center">
+                <!-- Open, Open Folder, Save, Refresh -->
+                <Button Classes="toolbtn" ToolTip.Tip="Open File (Ctrl+O)" Click="OpenFile_Click">
+                    <Image Source="/Assets/folder-open-document.png"/>
+                </Button>
+                <Button Classes="toolbtn" ToolTip.Tip="Open Folder (Ctrl+Shift+O)" Click="OpenFolder_Click">
+                    <Image Source="/Assets/folder-open.png"/>
+                </Button>
+                <Button Classes="toolbtn" ToolTip.Tip="Save All (Ctrl+S)" Click="Save_Click">
+                    <Image Source="/Assets/disk.png"/>
+                </Button>
+                <Button Classes="toolbtn" ToolTip.Tip="Refresh (F5)" Click="Refresh_Click">
+                    <Image Source="/Assets/arrow-circle-double-135.png"/>
+                </Button>
+
+                <Separator Classes="toolbarSep"/>
+
+                <!-- Cut, Copy, Paste -->
+                <Button Classes="toolbtn" ToolTip.Tip="Cut (Ctrl+X)" Click="Cut_Click">
+                    <Image Source="/Assets/scissors.png"/>
+                </Button>
+                <Button Classes="toolbtn" ToolTip.Tip="Copy (Ctrl+C)" Click="Copy_Click">
+                    <Image Source="/Assets/document-copy.png"/>
+                </Button>
+                <Button Classes="toolbtn" ToolTip.Tip="Paste (Ctrl+V)" Click="Paste_Click">
+                    <Image Source="/Assets/clipboard-paste.png"/>
+                </Button>
+
+                <Separator Classes="toolbarSep"/>
+
+                <!-- Rename, Edit Value, Delete -->
+                <Button Classes="toolbtn" ToolTip.Tip="Rename (Ctrl+R)" Click="Rename_Click">
+                    <Image Source="/Assets/edit-replace.png"/>
+                </Button>
+                <Button Classes="toolbtn" ToolTip.Tip="Edit Value (Ctrl+E)" Click="EditValue_Click">
+                    <Image Source="/Assets/pencil.png"/>
+                </Button>
+                <Button Classes="toolbtn" ToolTip.Tip="Delete (Delete)" Click="Delete_Click">
+                    <Image Source="/Assets/cross.png"/>
+                </Button>
+
+                <Separator Classes="toolbarSep"/>
+
+                <!-- 12 Tag Types -->
+                <Button Classes="toolbtn" ToolTip.Tip="Add Byte Tag" Click="AddByte_Click">
+                    <Image Source="/Assets/document-attribute-b.png"/>
+                </Button>
+                <Button Classes="toolbtn" ToolTip.Tip="Add Short Tag" Click="AddShort_Click">
+                    <Image Source="/Assets/document-attribute-s.png"/>
+                </Button>
+                <Button Classes="toolbtn" ToolTip.Tip="Add Int Tag" Click="AddInt_Click">
+                    <Image Source="/Assets/document-attribute-i.png"/>
+                </Button>
+                <Button Classes="toolbtn" ToolTip.Tip="Add Long Tag" Click="AddLong_Click">
+                    <Image Source="/Assets/document-attribute-l.png"/>
+                </Button>
+                <Button Classes="toolbtn" ToolTip.Tip="Add Float Tag" Click="AddFloat_Click">
+                    <Image Source="/Assets/document-attribute-f.png"/>
+                </Button>
+                <Button Classes="toolbtn" ToolTip.Tip="Add Double Tag" Click="AddDouble_Click">
+                    <Image Source="/Assets/document-attribute-d.png"/>
+                </Button>
+                <Button Classes="toolbtn" ToolTip.Tip="Add Byte Array Tag" Click="AddByteArray_Click">
+                    <Image Source="/Assets/edit-code-b.png"/>
+                </Button>
+                <Button Classes="toolbtn" ToolTip.Tip="Add Int Array Tag" Click="AddIntArray_Click">
+                    <Image Source="/Assets/edit-code-i.png"/>
+                </Button>
+                <Button Classes="toolbtn" ToolTip.Tip="Add Long Array Tag" Click="AddLongArray_Click">
+                    <Image Source="/Assets/edit-code-l.png"/>
+                </Button>
+                <Button Classes="toolbtn" ToolTip.Tip="Add String Tag" Click="AddString_Click">
+                    <Image Source="/Assets/edit-small-caps.png"/>
+                </Button>
+                <Button Classes="toolbtn" ToolTip.Tip="Add List Tag" Click="AddList_Click">
+                    <Image Source="/Assets/edit-list.png"/>
+                </Button>
+                <Button Classes="toolbtn" ToolTip.Tip="Add Compound Tag" Click="AddCompound_Click">
+                    <Image Source="/Assets/folder-open.png"/>
+                </Button>
+
+                <Separator Classes="toolbarSep"/>
+
+                <!-- Find & Find Next -->
+                <Button Classes="toolbtn" ToolTip.Tip="Find (Ctrl+F)" Click="FocusSearchBox_Click">
+                    <Image Source="/Assets/binocular.png"/>
+                </Button>
+                <Button Classes="toolbtn" ToolTip.Tip="Find Next (F3)" Click="FindNext_Click">
+                    <Image Source="/Assets/binocular--arrow.png"/>
+                </Button>
+            </WrapPanel>
+        </Border>
+
+        <!-- 3. Search Bar -->
+        <Border Grid.Row="2" Background="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"
+                Padding="8,5" BorderBrush="{DynamicResource SystemControlForegroundBaseLowBrush}" BorderThickness="0,0,0,1">
+            <Grid ColumnDefinitions="Auto,*,Auto,Auto,Auto">
+                <TextBlock Grid.Column="0" Text="Search (Ctrl+F):" VerticalAlignment="Center" Margin="0,0,8,0" FontWeight="SemiBold"/>
+                <TextBox x:Name="SearchTextBox" Grid.Column="1" Text="{Binding SearchQuery}"
+                         PlaceholderText="e.g. Villager, Pos, Health, -233..." KeyDown="SearchBox_KeyDown" Margin="0,0,8,0"/>
+                <Button Grid.Column="2" Content="Search All" Command="{Binding SearchCommand}" IsEnabled="{Binding !IsSearching}" Margin="0,0,6,0"/>
+                <Button Grid.Column="3" Content="Find Next (F3)" Command="{Binding FindNextCommand}" Margin="0,0,8,0"/>
+                <ProgressBar Grid.Column="4" IsIndeterminate="True" IsVisible="{Binding IsSearching}" Width="80" Height="14" VerticalAlignment="Center"/>
+            </Grid>
+        </Border>
+
+        <!-- 4. Main Workspace (Split: Tree on Left, Search / Info on Right) -->
+        <Grid Grid.Row="3" ColumnDefinitions="2*,4,1*">
+            <!-- NBT Tree View -->
+            <TreeView x:Name="MainTreeView" Grid.Column="0"
+                      ItemsSource="{Binding RootNodes}"
+                      SelectedItem="{Binding SelectedNode}"
+                      AutoScrollToSelectedItem="True"
+                      DoubleTapped="MainTreeView_DoubleTapped"
+                      KeyDown="MainTreeView_KeyDown">
+                <TreeView.Styles>
+                    <Style Selector="TreeViewItem" x:DataType="vm:NodeViewModel">
+                        <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}"/>
+                        <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}"/>
+                        <Setter Property="ContextMenu">
+                            <ContextMenu>
+                                <MenuItem Header="Edit Value" Click="EditValue_Click" InputGesture="Ctrl+E"/>
+                                <MenuItem Header="Rename" Click="Rename_Click" InputGesture="Ctrl+R"/>
+                                <MenuItem Header="Delete" Click="Delete_Click" InputGesture="Delete"/>
+                                <Separator/>
+                                <MenuItem Header="Cut" Click="Cut_Click" InputGesture="Ctrl+X"/>
+                                <MenuItem Header="Copy" Click="Copy_Click" InputGesture="Ctrl+C"/>
+                                <MenuItem Header="Paste" Click="Paste_Click" InputGesture="Ctrl+V"/>
+                                <Separator/>
+                                <MenuItem Header="Add Tag">
+                                    <MenuItem Header="Byte" Click="AddByte_Click"/>
+                                    <MenuItem Header="Short" Click="AddShort_Click"/>
+                                    <MenuItem Header="Int" Click="AddInt_Click"/>
+                                    <MenuItem Header="Long" Click="AddLong_Click"/>
+                                    <MenuItem Header="Float" Click="AddFloat_Click"/>
+                                    <MenuItem Header="Double" Click="AddDouble_Click"/>
+                                    <MenuItem Header="Byte Array" Click="AddByteArray_Click"/>
+                                    <MenuItem Header="Int Array" Click="AddIntArray_Click"/>
+                                    <MenuItem Header="Long Array" Click="AddLongArray_Click"/>
+                                    <MenuItem Header="String" Click="AddString_Click"/>
+                                    <MenuItem Header="List" Click="AddList_Click"/>
+                                    <MenuItem Header="Compound" Click="AddCompound_Click"/>
+                                </MenuItem>
+                            </ContextMenu>
+                        </Setter>
+                    </Style>
+                </TreeView.Styles>
+                <TreeView.ItemTemplate>
+                    <TreeDataTemplate ItemsSource="{Binding Children}">
+                        <StackPanel Orientation="Horizontal" Spacing="6" Margin="0,2">
+                            <Image Source="{Binding Icon}" Width="16" Height="16" VerticalAlignment="Center"/>
+                            <TextBlock Text="{Binding DisplayName}" VerticalAlignment="Center"
+                                       FontFamily="JetBrains Mono, DejaVu Sans Mono, monospace, Segoe UI"/>
+                        </StackPanel>
+                    </TreeDataTemplate>
+                </TreeView.ItemTemplate>
+            </TreeView>
+
+            <!-- Splitter -->
+            <GridSplitter Grid.Column="1" Width="4" HorizontalAlignment="Stretch"
+                          Background="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"/>
+
+            <!-- Search Results Panel -->
+            <DockPanel Grid.Column="2" Margin="4">
+                <TextBlock DockPanel.Dock="Top" Text="Search Results" FontWeight="Bold" Margin="4,6"/>
+                <ListBox x:Name="SearchResultsListBox" ItemsSource="{Binding SearchResults}"
+                         SelectedItem="{Binding SelectedSearchResult}"
+                         SelectionChanged="SearchResults_SelectionChanged">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Border Padding="6" BorderThickness="0,0,0,1" BorderBrush="{DynamicResource SystemControlForegroundBaseLowBrush}">
+                                <StackPanel Spacing="2">
+                                    <TextBlock Text="{Binding MatchText}" FontWeight="SemiBold" Foreground="{DynamicResource SystemAccentColor}"/>
+                                    <TextBlock Text="{Binding Path}" FontSize="11" Opacity="0.7" TextWrapping="Wrap"/>
+                                </StackPanel>
+                            </Border>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </DockPanel>
+        </Grid>
+
+        <!-- 5. Status Bar -->
+        <Border Grid.Row="4" Background="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"
+                Padding="8,4" BorderThickness="0,1,0,0" BorderBrush="{DynamicResource SystemControlForegroundBaseLowBrush}">
+            <TextBlock Text="{Binding StatusMessage}" FontSize="12"/>
+        </Border>
+    </Grid>
+</Window>

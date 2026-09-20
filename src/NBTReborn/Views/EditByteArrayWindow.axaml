@@ -1,0 +1,26 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="NBTReborn.Views.EditByteArrayWindow"
+        Title="Edit Array"
+        Width="500" Height="320"
+        CanResize="True"
+        WindowStartupLocation="CenterOwner"
+        ShowInTaskbar="False">
+    <Grid Margin="16" RowDefinitions="Auto,*,Auto">
+        <StackPanel Grid.Row="0" Spacing="4" Margin="0,0,0,10">
+            <TextBlock x:Name="TitleText" Text="Edit Array Data" FontWeight="SemiBold" FontSize="14"/>
+            <TextBlock x:Name="SubtitleText" Text="Comma, space, or newline separated values" Opacity="0.7" FontSize="12"/>
+        </StackPanel>
+
+        <TextBox Grid.Row="1" x:Name="ArrayDataTextBox"
+                 AcceptsReturn="True"
+                 TextWrapping="Wrap"
+                 FontFamily="JetBrains Mono, monospace, Consolas"
+                 FontSize="12"/>
+
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Spacing="10" Margin="0,12,0,0">
+            <Button x:Name="OkButton" Content="OK" Width="80" HorizontalContentAlignment="Center" Click="OkButton_Click" IsDefault="True"/>
+            <Button x:Name="CancelButton" Content="Cancel" Width="80" HorizontalContentAlignment="Center" Click="CancelButton_Click" IsCancel="True"/>
+        </StackPanel>
+    </Grid>
+</Window>

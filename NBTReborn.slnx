@@ -1,0 +1,7 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/NBTModel/NBTModel.csproj" />
+    <Project Path="src/NBTReborn/NBTReborn.csproj" />
+    <Project Path="src/Substrate/Substrate.csproj" />
+  </Folder>
+</Solution>

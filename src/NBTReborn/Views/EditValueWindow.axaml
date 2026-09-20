@@ -1,0 +1,26 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="NBTReborn.Views.EditValueWindow"
+        Title="Edit Value"
+        Width="440" Height="230"
+        CanResize="False"
+        WindowStartupLocation="CenterOwner"
+        ShowInTaskbar="False">
+    <Grid Margin="16" RowDefinitions="Auto,*,Auto">
+        <StackPanel Grid.Row="0" Spacing="6">
+            <TextBlock x:Name="TagInfoText" Text="Edit Tag" FontWeight="SemiBold" FontSize="14"/>
+            <TextBlock x:Name="TagNameText" Text="Name: " Opacity="0.75" FontSize="12"/>
+        </StackPanel>
+
+        <StackPanel Grid.Row="1" Spacing="4" VerticalAlignment="Center">
+            <TextBlock Text="Value:" FontWeight="SemiBold"/>
+            <TextBox x:Name="ValueTextBox" PlaceholderText="Enter value" TextChanged="ValueTextBox_TextChanged"/>
+            <TextBlock x:Name="ErrorText" Foreground="#FF5555" FontSize="11" IsVisible="False"/>
+        </StackPanel>
+
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Spacing="10" Margin="0,8,0,0">
+            <Button x:Name="OkButton" Content="OK" Width="80" HorizontalContentAlignment="Center" Click="OkButton_Click" IsDefault="True"/>
+            <Button x:Name="CancelButton" Content="Cancel" Width="80" HorizontalContentAlignment="Center" Click="CancelButton_Click" IsCancel="True"/>
+        </StackPanel>
+    </Grid>
+</Window>
