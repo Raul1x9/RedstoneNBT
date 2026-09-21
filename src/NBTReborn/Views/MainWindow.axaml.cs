@@ -36,7 +36,6 @@ public partial class MainWindow : Window
 
     public async Task ScrollNodeIntoViewAsync(NodeViewModel target)
     {
-        // 1. Build hierarchy of ancestors down to target
         var path = new List<NodeViewModel>();
         var curr = target;
         while (curr != null)
@@ -45,17 +44,14 @@ public partial class MainWindow : Window
             curr = curr.ParentViewModel;
         }
 
-        // 2. Expand all ancestors
         for (int i = 0; i < path.Count - 1; i++)
         {
             path[i].IsExpanded = true;
             path[i].LoadChildren();
         }
 
-        // Give Avalonia layout pass to create containers
         await Task.Delay(40);
 
-        // 3. Bring the item control into view
         Control? currentContainer = MainTreeView;
         for (int i = 0; i < path.Count; i++)
         {
@@ -76,6 +72,65 @@ public partial class MainWindow : Window
             {
                 itemControl.BringIntoView();
                 currentContainer = itemControl;
+            }
+        }
+    }
+
+    #endregion
+
+    #region Inline In-Place Value Editing
+
+    private void ValueText_PointerPressed(object? sender, PointerPressedEventArgs e)
+    {
+        if (sender is TextBlock tb && tb.DataContext is NodeViewModel vm && vm.IsScalar)
+        {
+            vm.BeginEdit();
+            e.Handled = true;
+        }
+    }
+
+    private void InlineEdit_Loaded(object? sender, RoutedEventArgs e)
+    {
+        if (sender is TextBox tb)
+        {
+            tb.Focus();
+            tb.SelectAll();
+        }
+    }
+
+    private void InlineEdit_KeyDown(object? sender, KeyEventArgs e)
+    {
+        if (sender is TextBox tb && tb.DataContext is NodeViewModel vm)
+        {
+            if (e.Key == Key.Enter)
+            {
+                if (vm.CommitEdit(tb.Text ?? string.Empty))
+                {
+                    if (DataContext is MainViewModel mainVm)
+                    {
+                        mainVm.StatusMessage = $"Updated value: {vm.DisplayName}";
+                    }
+                }
+                e.Handled = true;
+            }
+            else if (e.Key == Key.Escape)
+            {
+                vm.CancelEdit();
+                e.Handled = true;
+            }
+        }
+    }
+
+    private void InlineEdit_LostFocus(object? sender, RoutedEventArgs e)
+    {
+        if (sender is TextBox tb && tb.DataContext is NodeViewModel vm && vm.IsEditing)
+        {
+            if (vm.CommitEdit(tb.Text ?? string.Empty))
+            {
+                if (DataContext is MainViewModel mainVm)
+                {
+                    mainVm.StatusMessage = $"Updated value: {vm.DisplayName}";
+                }
             }
         }
     }
@@ -176,42 +231,37 @@ public partial class MainWindow : Window
 
     #endregion
 
-    #region Edit Operations (Rename, Edit Value, Delete, Cut, Copy, Paste, Move)
+    #region Edit Operations (Inline Edit, Rename, Delete, Cut, Copy, Paste, Move)
 
     private async void EditValue_Click(object? sender, RoutedEventArgs e)
     {
         if (DataContext is not MainViewModel vm || vm.SelectedNode == null) return;
         var sel = vm.SelectedNode;
 
-        if (sel.DataNode is TagDataNode tagNode)
+        // Inline in-place editing for scalar values (no popup window!)
+        if (sel.IsScalar)
         {
-            // Container nodes toggle expansion on edit command
-            if (tagNode is TagCompoundDataNode || tagNode is TagListDataNode)
-            {
-                sel.IsExpanded = !sel.IsExpanded;
-                return;
-            }
+            sel.BeginEdit();
+            return;
+        }
 
-            // Array nodes (Byte, Int, Long arrays)
-            if (tagNode is TagByteArrayDataNode || tagNode is TagIntArrayDataNode || tagNode is TagLongArrayDataNode)
-            {
-                var arrayDlg = new EditByteArrayWindow(tagNode.Tag, tagNode.NodeName);
-                if (await arrayDlg.ShowDialog<bool>(this))
-                {
-                    tagNode.SetModified();
-                    sel.RefreshDisplay();
-                    vm.StatusMessage = $"Updated array: {tagNode.NodeName ?? "data"}";
-                }
-                return;
-            }
+        // Containers toggle expansion
+        if (sel.IsContainer)
+        {
+            sel.IsExpanded = !sel.IsExpanded;
+            return;
+        }
 
-            // Scalar tags (Byte, Short, Int, Long, Float, Double, String)
-            var dlg = new EditValueWindow(tagNode.Tag, tagNode.NodeName);
-            if (await dlg.ShowDialog<bool>(this))
+        // Array nodes (Byte, Int, Long arrays) use dedicated array editor dialog
+        if (sel.DataNode is TagDataNode tagNode &&
+            (tagNode is TagByteArrayDataNode || tagNode is TagIntArrayDataNode || tagNode is TagLongArrayDataNode))
+        {
+            var arrayDlg = new EditByteArrayWindow(tagNode.Tag, tagNode.NodeName);
+            if (await arrayDlg.ShowDialog<bool>(this))
             {
                 tagNode.SetModified();
                 sel.RefreshDisplay();
-                vm.StatusMessage = $"Updated value: {tagNode.NodeName ?? "tag"}";
+                vm.StatusMessage = $"Updated array: {tagNode.NodeName ?? "data"}";
             }
         }
     }
@@ -343,8 +393,8 @@ public partial class MainWindow : Window
 
     private void FocusSearchBox_Click(object? sender, RoutedEventArgs e)
     {
-        SearchTextBox?.Focus();
-        SearchTextBox?.SelectAll();
+        ToolbarSearchBox?.Focus();
+        ToolbarSearchBox?.SelectAll();
     }
 
     private void FindNext_Click(object? sender, RoutedEventArgs e)

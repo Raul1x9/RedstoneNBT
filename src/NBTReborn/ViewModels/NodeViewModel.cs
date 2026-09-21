@@ -1,5 +1,7 @@
+using System;
 using System.Collections.ObjectModel;
-using System.IO;
+using System.Globalization;
+using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -10,6 +12,12 @@ namespace NBTReborn.ViewModels;
 
 public partial class NodeViewModel : ObservableObject
 {
+    private static readonly IBrush BrushNumber = SolidColorBrush.Parse("#79C0FF");   // Soft Cyan/Blue
+    private static readonly IBrush BrushString = SolidColorBrush.Parse("#A8D18D");   // Soft Sage Green
+    private static readonly IBrush BrushArray = SolidColorBrush.Parse("#D2A8FF");    // Soft Lavender
+    private static readonly IBrush BrushContainer = SolidColorBrush.Parse("#8B949E");// Muted Secondary Gray
+    private static readonly IBrush BrushDefault = SolidColorBrush.Parse("#E1E4EA");  // Neutral Silver
+
     private readonly DataNode _dataNode;
     private bool _isLoaded = false;
 
@@ -20,6 +28,27 @@ public partial class NodeViewModel : ObservableObject
 
     [ObservableProperty]
     private string _displayName = string.Empty;
+
+    [ObservableProperty]
+    private string _tagPrefix = string.Empty;
+
+    [ObservableProperty]
+    private bool _hasPrefix = false;
+
+    [ObservableProperty]
+    private string _valueDisplay = string.Empty;
+
+    [ObservableProperty]
+    private IBrush _valueBrush = BrushDefault;
+
+    [ObservableProperty]
+    private bool _isScalar = false;
+
+    [ObservableProperty]
+    private bool _isEditing = false;
+
+    [ObservableProperty]
+    private string _editText = string.Empty;
 
     [ObservableProperty]
     private string _nodeType = string.Empty;
@@ -48,15 +77,178 @@ public partial class NodeViewModel : ObservableObject
     {
         _dataNode = dataNode;
         ParentViewModel = parent;
-        DisplayName = dataNode.NodeDisplay;
         NodeType = dataNode.GetType().Name;
         LoadIcon();
+        UpdateDisplayValues();
 
         // If the node has children or is an expandable container, add dummy placeholder for chevron
         if (NodeCanHaveChildren(dataNode))
         {
             Children.Add(new DummyNodeViewModel());
         }
+    }
+
+    public void UpdateDisplayValues()
+    {
+        DisplayName = _dataNode.NodeDisplay;
+
+        if (_dataNode is TagDataNode tagNode)
+        {
+            string? name = tagNode.NodeName;
+            if (!string.IsNullOrEmpty(name))
+            {
+                TagPrefix = name + ": ";
+                HasPrefix = true;
+            }
+            else
+            {
+                TagPrefix = string.Empty;
+                HasPrefix = false;
+            }
+
+            switch (tagNode.Tag)
+            {
+                case TagNodeByte b:
+                    IsScalar = true;
+                    ValueDisplay = b.Data.ToString();
+                    ValueBrush = BrushNumber;
+                    break;
+                case TagNodeShort s:
+                    IsScalar = true;
+                    ValueDisplay = s.Data.ToString();
+                    ValueBrush = BrushNumber;
+                    break;
+                case TagNodeInt i:
+                    IsScalar = true;
+                    ValueDisplay = i.Data.ToString();
+                    ValueBrush = BrushNumber;
+                    break;
+                case TagNodeLong l:
+                    IsScalar = true;
+                    ValueDisplay = l.Data.ToString();
+                    ValueBrush = BrushNumber;
+                    break;
+                case TagNodeFloat f:
+                    IsScalar = true;
+                    ValueDisplay = f.Data.ToString(CultureInfo.InvariantCulture);
+                    ValueBrush = BrushNumber;
+                    break;
+                case TagNodeDouble d:
+                    IsScalar = true;
+                    ValueDisplay = d.Data.ToString(CultureInfo.InvariantCulture);
+                    ValueBrush = BrushNumber;
+                    break;
+                case TagNodeString str:
+                    IsScalar = true;
+                    ValueDisplay = str.Data;
+                    ValueBrush = BrushString;
+                    break;
+                case TagNodeByteArray ba:
+                    IsScalar = false;
+                    ValueDisplay = $"{ba.Length} bytes";
+                    ValueBrush = BrushArray;
+                    break;
+                case TagNodeIntArray ia:
+                    IsScalar = false;
+                    ValueDisplay = $"{ia.Length} integers";
+                    ValueBrush = BrushArray;
+                    break;
+                case TagNodeLongArray la:
+                    IsScalar = false;
+                    ValueDisplay = $"{la.Length} long integers";
+                    ValueBrush = BrushArray;
+                    break;
+                case TagNodeCompound compound:
+                    IsScalar = false;
+                    ValueDisplay = $"{compound.Count} {(compound.Count == 1 ? "entry" : "entries")}";
+                    ValueBrush = BrushContainer;
+                    break;
+                case TagNodeList list:
+                    IsScalar = false;
+                    ValueDisplay = $"{list.Count} {(list.Count == 1 ? "entry" : "entries")}";
+                    ValueBrush = BrushContainer;
+                    break;
+                default:
+                    IsScalar = false;
+                    ValueDisplay = tagNode.Tag?.ToString() ?? string.Empty;
+                    ValueBrush = BrushDefault;
+                    break;
+            }
+        }
+        else
+        {
+            TagPrefix = string.Empty;
+            HasPrefix = false;
+            IsScalar = false;
+            ValueDisplay = _dataNode.NodeDisplay;
+            ValueBrush = BrushDefault;
+        }
+
+        EditText = ValueDisplay;
+    }
+
+    public void BeginEdit()
+    {
+        if (!IsScalar) return;
+        EditText = ValueDisplay;
+        IsEditing = true;
+    }
+
+    public void CancelEdit()
+    {
+        EditText = ValueDisplay;
+        IsEditing = false;
+    }
+
+    public bool CommitEdit(string newValue)
+    {
+        if (!IsScalar || _dataNode is not TagDataNode tagNode)
+        {
+            IsEditing = false;
+            return false;
+        }
+
+        bool success = false;
+        string input = newValue?.Trim() ?? string.Empty;
+
+        switch (tagNode.Tag)
+        {
+            case TagNodeByte b:
+                if (sbyte.TryParse(input, out sbyte sb)) { b.Data = (byte)sb; success = true; }
+                else if (byte.TryParse(input, out byte ub)) { b.Data = ub; success = true; }
+                break;
+            case TagNodeShort s:
+                if (short.TryParse(input, out short sv)) { s.Data = sv; success = true; }
+                break;
+            case TagNodeInt i:
+                if (int.TryParse(input, out int iv)) { i.Data = iv; success = true; }
+                break;
+            case TagNodeLong l:
+                if (long.TryParse(input, out long lv)) { l.Data = lv; success = true; }
+                break;
+            case TagNodeFloat f:
+                if (float.TryParse(input, NumberStyles.Float, CultureInfo.InvariantCulture, out float fv) ||
+                    float.TryParse(input, out fv)) { f.Data = fv; success = true; }
+                break;
+            case TagNodeDouble d:
+                if (double.TryParse(input, NumberStyles.Float, CultureInfo.InvariantCulture, out double dv) ||
+                    double.TryParse(input, out dv)) { d.Data = dv; success = true; }
+                break;
+            case TagNodeString str:
+                str.Data = newValue ?? string.Empty;
+                success = true;
+                break;
+        }
+
+        if (success)
+        {
+            tagNode.SetModified();
+            UpdateDisplayValues();
+            ParentViewModel?.RefreshDisplay();
+        }
+
+        IsEditing = false;
+        return success;
     }
 
     public static bool NodeCanHaveChildren(DataNode node)
@@ -115,7 +307,7 @@ public partial class NodeViewModel : ObservableObject
 
     public void RefreshDisplay()
     {
-        DisplayName = _dataNode.NodeDisplay;
+        UpdateDisplayValues();
         ParentViewModel?.RefreshDisplay();
     }
 

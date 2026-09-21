@@ -22,6 +22,12 @@ public partial class MainViewModel : ViewModelBase
     private bool _isSearching = false;
 
     [ObservableProperty]
+    private bool _showSearchResults = false;
+
+    [ObservableProperty]
+    private string _searchResultsHeader = "Search Results";
+
+    [ObservableProperty]
     private NodeViewModel? _selectedNode;
 
     [ObservableProperty]
@@ -58,6 +64,8 @@ public partial class MainViewModel : ViewModelBase
             {
                 var vm = new NodeViewModel(node);
                 RootNodes.Add(vm);
+                ShowSearchResults = false;
+                SearchResults.Clear();
                 StatusMessage = $"Opened: {Path.GetFileName(filePath)}";
             }
         }
@@ -77,6 +85,8 @@ public partial class MainViewModel : ViewModelBase
             var node = new DirectoryDataNode(folderPath);
             var vm = new NodeViewModel(node);
             RootNodes.Add(vm);
+            ShowSearchResults = false;
+            SearchResults.Clear();
             StatusMessage = $"Opened folder: {Path.GetFileName(folderPath)}";
         }
         catch (Exception ex)
@@ -217,6 +227,20 @@ public partial class MainViewModel : ViewModelBase
         }
     }
 
+    [RelayCommand]
+    public void EditSelectedNode()
+    {
+        if (SelectedNode == null) return;
+        if (SelectedNode.IsScalar)
+        {
+            SelectedNode.BeginEdit();
+        }
+        else if (SelectedNode.IsContainer)
+        {
+            SelectedNode.IsExpanded = !SelectedNode.IsExpanded;
+        }
+    }
+
     public NodeViewModel? GetTargetContainerForNewTag(TagType type)
     {
         if (SelectedNode != null)
@@ -278,12 +302,20 @@ public partial class MainViewModel : ViewModelBase
         });
 
         IsSearching = false;
-        StatusMessage = $"Search complete: Found {SearchResults.Count} matches.";
+        ShowSearchResults = SearchResults.Count > 0;
+        SearchResultsHeader = $"Search Results ({SearchResults.Count})";
+        StatusMessage = $"Search complete: Found {SearchResults.Count} match(es).";
 
         if (SearchResults.Count > 0)
         {
             FindNext();
         }
+    }
+
+    [RelayCommand]
+    public void CloseSearchResults()
+    {
+        ShowSearchResults = false;
     }
 
     [RelayCommand]
