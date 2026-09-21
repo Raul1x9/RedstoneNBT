@@ -7,7 +7,7 @@
         x:Class="NBTReborn.Views.MainWindow"
         x:DataType="vm:MainViewModel"
         Icon="/Assets/box.png"
-        Title="NBTReborn — Modern Cross-Platform NBT Explorer"
+        Title="Redstone NBT — Modern Minecraft NBT Editor"
         Background="#1E1F22">
 
     <Window.Styles>
@@ -58,11 +58,13 @@
         <!-- 1. Menu Bar -->
         <Menu Grid.Row="0" Background="#26282D" BorderBrush="#33373E" BorderThickness="0,0,0,1">
             <MenuItem Header="_File">
+                <MenuItem Header="_New NBT File..." Click="NewFile_Click" InputGesture="Ctrl+N"/>
                 <MenuItem Header="_Open..." Click="OpenFile_Click" InputGesture="Ctrl+O"/>
                 <MenuItem Header="Open _Folder..." Click="OpenFolder_Click" InputGesture="Ctrl+Shift+O"/>
                 <MenuItem Header="Open Minecraft Save Folder" Click="OpenMinecraftSaveFolder_Click"/>
                 <Separator/>
                 <MenuItem Header="_Save All" Click="Save_Click" InputGesture="Ctrl+S"/>
+                <MenuItem Header="Save _As..." Click="SaveAs_Click" InputGesture="Ctrl+Shift+S"/>
                 <MenuItem Header="_Refresh" Click="Refresh_Click" InputGesture="F5"/>
                 <Separator/>
                 <MenuItem Header="_Exit" Click="Exit_Click" InputGesture="Alt+F4"/>
@@ -84,7 +86,7 @@
                 <MenuItem Header="Find _Next" Click="FindNext_Click" InputGesture="F3"/>
             </MenuItem>
             <MenuItem Header="_Help">
-                <MenuItem Header="_About NBTReborn" Click="About_Click"/>
+                <MenuItem Header="_About Redstone NBT" Click="About_Click"/>
             </MenuItem>
         </Menu>
 
@@ -94,6 +96,9 @@
                 <!-- Action Buttons WrapPanel -->
                 <WrapPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
                     <!-- File Operations -->
+                    <Button Classes="toolbtn" ToolTip.Tip="New NBT File (Ctrl+N)" Click="NewFile_Click">
+                        <Image Source="/Assets/document-24.png"/>
+                    </Button>
                     <Button Classes="toolbtn" ToolTip.Tip="Open File (Ctrl+O)" Click="OpenFile_Click">
                         <Image Source="/Assets/folder-open-document.png"/>
                     </Button>
@@ -315,7 +320,7 @@
         <Border Grid.Row="3" Background="#26282D" Padding="10,4" BorderThickness="0,1,0,0" BorderBrush="#33373E">
             <Grid ColumnDefinitions="*,Auto">
                 <TextBlock Grid.Column="0" Text="{Binding StatusMessage}" FontSize="12" Foreground="#8B949E" VerticalAlignment="Center"/>
-                <TextBlock Grid.Column="1" Text="NBTReborn" FontSize="11" Foreground="#5B626E" VerticalAlignment="Center"/>
+                <TextBlock Grid.Column="1" Text="Redstone NBT" FontSize="11" Foreground="#5B626E" VerticalAlignment="Center"/>
             </Grid>
         </Border>
     </Grid>

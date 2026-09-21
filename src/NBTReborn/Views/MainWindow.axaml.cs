@@ -9,6 +9,7 @@ using Avalonia.Interactivity;
 using Avalonia.Platform.Storage;
 using NBTExplorer.Model;
 using NBTReborn.ViewModels;
+using Substrate.Core;
 using Substrate.Nbt;
 
 namespace NBTReborn.Views;
@@ -139,6 +140,119 @@ public partial class MainWindow : Window
 
     #region File Menu & Toolbar Operations
 
+    private async void NewFile_Click(object? sender, RoutedEventArgs e)
+    {
+        var topLevel = GetTopLevel(this);
+        if (topLevel == null) return;
+        if (DataContext is not MainViewModel vm) return;
+
+        var file = await topLevel.StorageProvider.SaveFilePickerAsync(new FilePickerSaveOptions
+        {
+            Title = "Create New NBT File",
+            DefaultExtension = "nbt",
+            SuggestedFileName = "new.nbt",
+            FileTypeChoices = new[]
+            {
+                new FilePickerFileType("Uncompressed NBT File (*.nbt)")
+                {
+                    Patterns = new[] { "*.nbt" }
+                },
+                new FilePickerFileType("GZip-compressed NBT File (*.dat, *.nbt)")
+                {
+                    Patterns = new[] { "*.dat", "*.nbt" }
+                },
+                new FilePickerFileType("Zlib-compressed NBT File (*.nbt, *.dat)")
+                {
+                    Patterns = new[] { "*.nbt", "*.dat" }
+                },
+                FilePickerFileTypes.All
+            }
+        });
+
+        if (file != null)
+        {
+            var path = file.Path.LocalPath;
+            CompressionType compression = CompressionType.None;
+            if (path.EndsWith(".dat", StringComparison.OrdinalIgnoreCase))
+            {
+                compression = CompressionType.GZip;
+            }
+
+            vm.CreateNewNbtFile(path, compression);
+        }
+    }
+
+    private async void SaveAs_Click(object? sender, RoutedEventArgs e)
+    {
+        var topLevel = GetTopLevel(this);
+        if (topLevel == null) return;
+        if (DataContext is not MainViewModel vm) return;
+
+        NodeViewModel? targetNode = null;
+        if (vm.SelectedNode != null)
+        {
+            var cur = vm.SelectedNode;
+            while (cur != null)
+            {
+                if (cur.DataNode is NbtFileDataNode)
+                {
+                    targetNode = cur;
+                    break;
+                }
+                cur = cur.ParentViewModel;
+            }
+        }
+
+        if (targetNode == null && vm.RootNodes.Count > 0)
+        {
+            targetNode = vm.RootNodes[0];
+        }
+
+        if (targetNode?.DataNode is not NbtFileDataNode fileNode)
+        {
+            vm.StatusMessage = "Please select an NBT file to Save As.";
+            return;
+        }
+
+        var ext = Path.GetExtension(fileNode.NodeName).TrimStart('.');
+        if (string.IsNullOrEmpty(ext)) ext = "nbt";
+
+        var file = await topLevel.StorageProvider.SaveFilePickerAsync(new FilePickerSaveOptions
+        {
+            Title = "Save NBT File As",
+            DefaultExtension = ext,
+            SuggestedFileName = fileNode.NodeName,
+            FileTypeChoices = new[]
+            {
+                new FilePickerFileType("GZip-compressed NBT File (*.dat, *.nbt)")
+                {
+                    Patterns = new[] { "*.dat", "*.nbt" }
+                },
+                new FilePickerFileType("Uncompressed NBT File (*.nbt)")
+                {
+                    Patterns = new[] { "*.nbt" }
+                },
+                new FilePickerFileType("Zlib-compressed NBT File (*.nbt, *.dat)")
+                {
+                    Patterns = new[] { "*.nbt", "*.dat" }
+                },
+                FilePickerFileTypes.All
+            }
+        });
+
+        if (file != null)
+        {
+            var path = file.Path.LocalPath;
+            CompressionType compression = path.EndsWith(".dat", StringComparison.OrdinalIgnoreCase)
+                ? CompressionType.GZip
+                : fileNode.Compression;
+
+            fileNode.SaveAs(path, compression);
+            targetNode.RefreshDisplay();
+            vm.StatusMessage = $"Saved file as: {Path.GetFileName(path)}";
+        }
+    }
+
     private async void OpenFile_Click(object? sender, RoutedEventArgs e)
     {
         var topLevel = GetTopLevel(this);
@@ -150,9 +264,33 @@ public partial class MainWindow : Window
             AllowMultiple = false,
             FileTypeFilter = new[]
             {
-                new FilePickerFileType("Minecraft Region / NBT Files")
+                new FilePickerFileType("All Supported Files (*.dat, *.nbt, *.mca, *.mcr, *.schematic, *.schem, *.mcstructure)")
                 {
-                    Patterns = new[] { "*.mca", "*.mcr", "*.dat", "*.nbt" }
+                    Patterns = new[] { "*.dat", "*.nbt", "*.mca", "*.mcr", "*.schematic", "*.schem", "*.mcstructure", "*.dat_mcr", "*.dat_old", "*.bpt", "*.rc", "*.2dr" }
+                },
+                new FilePickerFileType("GZip-compressed NBT File (*.dat, *.nbt)")
+                {
+                    Patterns = new[] { "*.dat", "*.nbt" }
+                },
+                new FilePickerFileType("Uncompressed NBT File (*.nbt)")
+                {
+                    Patterns = new[] { "*.nbt" }
+                },
+                new FilePickerFileType("Minecraft Region Files (*.mca, *.mcr)")
+                {
+                    Patterns = new[] { "*.mca", "*.mcr" }
+                },
+                new FilePickerFileType("Schematic Files (*.schematic, *.schem)")
+                {
+                    Patterns = new[] { "*.schematic", "*.schem" }
+                },
+                new FilePickerFileType("Bedrock Structure Files (*.mcstructure)")
+                {
+                    Patterns = new[] { "*.mcstructure" }
+                },
+                new FilePickerFileType("Zlib-compressed NBT File (*.nbt, *.dat)")
+                {
+                    Patterns = new[] { "*.nbt", "*.dat" }
                 },
                 FilePickerFileTypes.All
             }
@@ -366,6 +504,10 @@ public partial class MainWindow : Window
         {
             existingNames = comp.NamedTagContainer.TagNamesInUse;
         }
+        else if (target.DataNode is NbtFileDataNode fileNode)
+        {
+            existingNames = fileNode.NamedTagContainer.TagNamesInUse;
+        }
 
         var dlg = new CreateTagWindow(type, hasName, existingNames);
         if (await dlg.ShowDialog<bool>(this) && dlg.ResultTag != null)
@@ -441,9 +583,15 @@ public partial class MainWindow : Window
             EditValue_Click(sender, e);
             e.Handled = true;
         }
+        else if (e.KeyModifiers == (KeyModifiers.Control | KeyModifiers.Shift))
+        {
+            if (e.Key == Key.S) { SaveAs_Click(sender, e); e.Handled = true; }
+            else if (e.Key == Key.O) { OpenFolder_Click(sender, e); e.Handled = true; }
+        }
         else if (e.KeyModifiers == KeyModifiers.Control)
         {
-            if (e.Key == Key.E) { EditValue_Click(sender, e); e.Handled = true; }
+            if (e.Key == Key.N) { NewFile_Click(sender, e); e.Handled = true; }
+            else if (e.Key == Key.E) { EditValue_Click(sender, e); e.Handled = true; }
             else if (e.Key == Key.R) { Rename_Click(sender, e); e.Handled = true; }
             else if (e.Key == Key.C) { Copy_Click(sender, e); e.Handled = true; }
             else if (e.Key == Key.X) { Cut_Click(sender, e); e.Handled = true; }

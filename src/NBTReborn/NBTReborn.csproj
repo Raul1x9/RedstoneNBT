@@ -4,6 +4,10 @@
     <TargetFramework>net10.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ApplicationManifest>app.manifest</ApplicationManifest>
+    <Product>Redstone NBT</Product>
+    <AssemblyTitle>Redstone NBT</AssemblyTitle>
+    <Title>Redstone NBT</Title>
+    <Description>Modern Cross-Platform Minecraft NBT Editor</Description>
   </PropertyGroup>
 
   <ItemGroup>

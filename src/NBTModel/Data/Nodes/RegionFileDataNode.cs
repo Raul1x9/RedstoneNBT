@@ -1,4 +1,4 @@
-﻿using System.IO;
+using System.IO;
 using System.Text.RegularExpressions;
 using Substrate.Core;
 using System.Collections.Generic;
@@ -28,7 +28,9 @@ namespace NBTExplorer.Model
         public static bool SupportedNamePattern (string path)
         {
             path = Path.GetFileName(path);
-            return _namePattern.IsMatch(path);
+            return _namePattern.IsMatch(path)
+                || path.EndsWith(".mca", StringComparison.OrdinalIgnoreCase)
+                || path.EndsWith(".mcr", StringComparison.OrdinalIgnoreCase);
         }
 
         public static bool RegionCoordinates (string path, out int rx, out int rz)

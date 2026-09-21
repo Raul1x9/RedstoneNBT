@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -284,15 +284,11 @@ namespace Substrate.Core
 
                         Stream ret = new ZlibStream(new MemoryStream(data), CompressionMode.Decompress, true);
                         return ret;
-
-                        /*MemoryStream sinkZ = new MemoryStream();
-                        ZlibStream zOut = new ZlibStream(sinkZ, CompressionMode.Decompress, true);
-                        zOut.Write(data, 0, data.Length);
-                        zOut.Flush();
-                        zOut.Close();
-
-                        sinkZ.Seek(0, SeekOrigin.Begin);
-                        return sinkZ;*/
+                    }
+                    else if (version == 3) {
+                        byte[] data = new byte[length - 1];
+                        file.Read(data, 0, data.Length);
+                        return new MemoryStream(data);
                     }
 
                     Debugln("READ", x, z, "unknown version " + version);

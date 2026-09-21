@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using NBTExplorer.Model;
+using Substrate.Core;
 using Substrate.Nbt;
 
 namespace NBTReborn.ViewModels;
@@ -40,7 +41,27 @@ public partial class MainViewModel : ViewModelBase
 
     public MainViewModel()
     {
-        StatusMessage = "Welcome to NBTReborn - Modern Cross-Platform NBT Explorer";
+        StatusMessage = "Welcome to Redstone NBT — Modern Minecraft NBT Editor";
+    }
+
+    public void CreateNewNbtFile(string filePath, CompressionType compression = CompressionType.None)
+    {
+        try
+        {
+            var node = NbtFileDataNode.CreateNew(filePath, compression, "");
+            var vm = new NodeViewModel(node);
+            RootNodes.Add(vm);
+            SelectedNode = vm;
+            vm.IsExpanded = true;
+            vm.LoadChildren();
+            ShowSearchResults = false;
+            SearchResults.Clear();
+            StatusMessage = $"Created new NBT file: {Path.GetFileName(filePath)}";
+        }
+        catch (Exception ex)
+        {
+            StatusMessage = $"Error creating file: {ex.Message}";
+        }
     }
 
     [RelayCommand]
@@ -58,15 +79,24 @@ public partial class MainViewModel : ViewModelBase
             else
             {
                 node = NbtFileDataNode.TryCreateFrom(filePath);
+                if (node == null && (filePath.EndsWith(".mca", StringComparison.OrdinalIgnoreCase) || filePath.EndsWith(".mcr", StringComparison.OrdinalIgnoreCase)))
+                {
+                    node = RegionFileDataNode.TryCreateFrom(filePath);
+                }
             }
 
             if (node != null)
             {
                 var vm = new NodeViewModel(node);
                 RootNodes.Add(vm);
+                SelectedNode = vm;
                 ShowSearchResults = false;
                 SearchResults.Clear();
                 StatusMessage = $"Opened: {Path.GetFileName(filePath)}";
+            }
+            else
+            {
+                StatusMessage = $"Could not parse '{Path.GetFileName(filePath)}' as an NBT or Region file.";
             }
         }
         catch (Exception ex)
@@ -272,6 +302,10 @@ public partial class MainViewModel : ViewModelBase
         else if (targetContainer.DataNode is TagListDataNode listNode)
         {
             listNode.AppendTag(tag);
+        }
+        else if (targetContainer.DataNode is NbtFileDataNode fileNode)
+        {
+            fileNode.AddTag(tag, name);
         }
         else
         {
