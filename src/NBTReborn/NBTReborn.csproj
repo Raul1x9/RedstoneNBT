@@ -8,6 +8,7 @@
     <AssemblyTitle>Redstone NBT</AssemblyTitle>
     <Title>Redstone NBT</Title>
     <Description>Modern Cross-Platform Minecraft NBT Editor</Description>
+    <ApplicationIcon>Assets/redstone-nbt.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>

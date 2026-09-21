@@ -1,0 +1,39 @@
+# Maintainer: Raul <raul@local>
+pkgname=redstone-nbt-bin
+_pkgname=redstone-nbt
+pkgver=1.0.0
+pkgrel=1
+pkgdesc="Modern cross-platform Minecraft NBT editor revived from NBTExplorer"
+arch=('x86_64')
+url="https://github.com/Raul/RedstoneNBT"
+license=('MIT')
+depends=('dotnet-runtime-10.0' 'fontconfig' 'libx11' 'libice' 'libsm')
+optdepends=('libxcursor: Wayland and X11 cursor support')
+provides=('redstone-nbt')
+conflicts=('redstone-nbt')
+source=("redstone-nbt-${pkgver}-linux-x64.tar.gz"
+        "redstone-nbt.desktop")
+sha256sums=('fe9a7f9fc469bca19cd33bbf95d1e2cf19dcaf06308880036163e590289b7b3b'
+            'dacf40ad9682447f796fc723be007c9058c367768e9d6ff088d4834276a4b705')
+
+package() {
+    install -dm755 "${pkgdir}/usr/lib/${_pkgname}"
+    install -dm755 "${pkgdir}/usr/bin"
+    install -dm755 "${pkgdir}/usr/share/applications"
+    install -dm755 "${pkgdir}/usr/share/icons/hicolor/256x256/apps"
+    install -dm755 "${pkgdir}/usr/share/licenses/${pkgname}"
+
+    cp -a "${srcdir}/redstone-nbt-${pkgver}-linux-x64/"* "${pkgdir}/usr/lib/${_pkgname}/"
+    chmod +x "${pkgdir}/usr/lib/${_pkgname}/redstone-nbt"
+    chmod +x "${pkgdir}/usr/lib/${_pkgname}/NBTReborn"
+
+    ln -s "/usr/lib/${_pkgname}/redstone-nbt" "${pkgdir}/usr/bin/${_pkgname}"
+
+    install -Dm644 "${srcdir}/redstone-nbt.desktop" "${pkgdir}/usr/share/applications/${_pkgname}.desktop"
+    if [ -f "${pkgdir}/usr/lib/${_pkgname}/redstone-nbt.png" ]; then
+        install -Dm644 "${pkgdir}/usr/lib/${_pkgname}/redstone-nbt.png" "${pkgdir}/usr/share/icons/hicolor/256x256/apps/${_pkgname}.png"
+    fi
+    if [ -f "${pkgdir}/usr/lib/${_pkgname}/LICENSE" ]; then
+        install -Dm644 "${pkgdir}/usr/lib/${_pkgname}/LICENSE" "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
+    fi
+}

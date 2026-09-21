@@ -110,6 +110,7 @@ public partial class MainWindow : Window
                     if (DataContext is MainViewModel mainVm)
                     {
                         mainVm.StatusMessage = $"Updated value: {vm.DisplayName}";
+                        mainVm.UpdateToolStates();
                     }
                 }
                 e.Handled = true;
@@ -131,6 +132,7 @@ public partial class MainWindow : Window
                 if (DataContext is MainViewModel mainVm)
                 {
                     mainVm.StatusMessage = $"Updated value: {vm.DisplayName}";
+                    mainVm.UpdateToolStates();
                 }
             }
         }
@@ -250,6 +252,7 @@ public partial class MainWindow : Window
             fileNode.SaveAs(path, compression);
             targetNode.RefreshDisplay();
             vm.StatusMessage = $"Saved file as: {Path.GetFileName(path)}";
+            vm.UpdateToolStates();
         }
     }
 
@@ -400,6 +403,7 @@ public partial class MainWindow : Window
                 tagNode.SetModified();
                 sel.RefreshDisplay();
                 vm.StatusMessage = $"Updated array: {tagNode.NodeName ?? "data"}";
+                vm.UpdateToolStates();
             }
         }
     }
@@ -430,6 +434,7 @@ public partial class MainWindow : Window
                     sel.RefreshDisplay();
                     sel.ParentViewModel?.ReloadChildren();
                     vm.StatusMessage = $"Renamed tag to '{newName}'.";
+                    vm.UpdateToolStates();
                 }
             }
         }

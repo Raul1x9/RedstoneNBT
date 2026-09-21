@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using NBTExplorer.Model;
+using NBTModel.Interop;
 using Substrate.Core;
 using Substrate.Nbt;
 
@@ -31,6 +32,11 @@ public partial class MainViewModel : ViewModelBase
     [ObservableProperty]
     private NodeViewModel? _selectedNode;
 
+    partial void OnSelectedNodeChanged(NodeViewModel? oldValue, NodeViewModel? newValue)
+    {
+        UpdateToolStates();
+    }
+
     [ObservableProperty]
     private SearchResultViewModel? _selectedSearchResult;
 
@@ -39,9 +45,70 @@ public partial class MainViewModel : ViewModelBase
     public ObservableCollection<NodeViewModel> RootNodes { get; } = new();
     public ObservableCollection<SearchResultViewModel> SearchResults { get; } = new();
 
+    #region Tool State Capabilities (Dynamic Toolbar & Menu Enabling)
+
+    public bool CanCut => SelectedNode != null && SelectedNode.CanCut;
+    public bool CanCopy => SelectedNode != null && SelectedNode.CanCopy;
+    public bool CanPaste => NbtClipboardController.ContainsData &&
+        ((SelectedNode != null && SelectedNode.CanPaste) ||
+         (SelectedNode?.ParentViewModel != null && SelectedNode.ParentViewModel.CanPaste) ||
+         (RootNodes.Count == 1 && RootNodes[0].CanPaste));
+    public bool CanRename => SelectedNode != null && SelectedNode.CanRename;
+    public bool CanEditValue => SelectedNode != null && (SelectedNode.IsScalar || SelectedNode.CanEdit);
+    public bool CanDelete => SelectedNode != null && SelectedNode.CanDelete;
+    public bool CanMoveUp => SelectedNode != null && SelectedNode.CanMoveUp;
+    public bool CanMoveDown => SelectedNode != null && SelectedNode.CanMoveDown;
+    public bool CanRefresh => SelectedNode != null || RootNodes.Count > 0;
+    public bool CanSaveAll => RootNodes.Any(r => r.DataNode.IsModified);
+
+    public bool CanAddTag(TagType type) => GetTargetContainerForNewTag(type) != null;
+
+    public bool CanAddByte => CanAddTag(TagType.TAG_BYTE);
+    public bool CanAddShort => CanAddTag(TagType.TAG_SHORT);
+    public bool CanAddInt => CanAddTag(TagType.TAG_INT);
+    public bool CanAddLong => CanAddTag(TagType.TAG_LONG);
+    public bool CanAddFloat => CanAddTag(TagType.TAG_FLOAT);
+    public bool CanAddDouble => CanAddTag(TagType.TAG_DOUBLE);
+    public bool CanAddByteArray => CanAddTag(TagType.TAG_BYTE_ARRAY);
+    public bool CanAddIntArray => CanAddTag(TagType.TAG_INT_ARRAY);
+    public bool CanAddLongArray => CanAddTag(TagType.TAG_LONG_ARRAY);
+    public bool CanAddString => CanAddTag(TagType.TAG_STRING);
+    public bool CanAddList => CanAddTag(TagType.TAG_LIST);
+    public bool CanAddCompound => CanAddTag(TagType.TAG_COMPOUND);
+
+    public void UpdateToolStates()
+    {
+        OnPropertyChanged(nameof(CanCut));
+        OnPropertyChanged(nameof(CanCopy));
+        OnPropertyChanged(nameof(CanPaste));
+        OnPropertyChanged(nameof(CanRename));
+        OnPropertyChanged(nameof(CanEditValue));
+        OnPropertyChanged(nameof(CanDelete));
+        OnPropertyChanged(nameof(CanMoveUp));
+        OnPropertyChanged(nameof(CanMoveDown));
+        OnPropertyChanged(nameof(CanRefresh));
+        OnPropertyChanged(nameof(CanSaveAll));
+
+        OnPropertyChanged(nameof(CanAddByte));
+        OnPropertyChanged(nameof(CanAddShort));
+        OnPropertyChanged(nameof(CanAddInt));
+        OnPropertyChanged(nameof(CanAddLong));
+        OnPropertyChanged(nameof(CanAddFloat));
+        OnPropertyChanged(nameof(CanAddDouble));
+        OnPropertyChanged(nameof(CanAddByteArray));
+        OnPropertyChanged(nameof(CanAddIntArray));
+        OnPropertyChanged(nameof(CanAddLongArray));
+        OnPropertyChanged(nameof(CanAddString));
+        OnPropertyChanged(nameof(CanAddList));
+        OnPropertyChanged(nameof(CanAddCompound));
+    }
+
+    #endregion
+
     public MainViewModel()
     {
         StatusMessage = "Welcome to Redstone NBT — Modern Minecraft NBT Editor";
+        UpdateToolStates();
     }
 
     public void CreateNewNbtFile(string filePath, CompressionType compression = CompressionType.None)
@@ -57,6 +124,7 @@ public partial class MainViewModel : ViewModelBase
             ShowSearchResults = false;
             SearchResults.Clear();
             StatusMessage = $"Created new NBT file: {Path.GetFileName(filePath)}";
+            UpdateToolStates();
         }
         catch (Exception ex)
         {
@@ -93,6 +161,7 @@ public partial class MainViewModel : ViewModelBase
                 ShowSearchResults = false;
                 SearchResults.Clear();
                 StatusMessage = $"Opened: {Path.GetFileName(filePath)}";
+                UpdateToolStates();
             }
             else
             {
@@ -118,6 +187,7 @@ public partial class MainViewModel : ViewModelBase
             ShowSearchResults = false;
             SearchResults.Clear();
             StatusMessage = $"Opened folder: {Path.GetFileName(folderPath)}";
+            UpdateToolStates();
         }
         catch (Exception ex)
         {
@@ -137,6 +207,8 @@ public partial class MainViewModel : ViewModelBase
                 savedCount++;
             }
         }
+
+        UpdateToolStates();
 
         StatusMessage = savedCount > 0
             ? $"Successfully saved {savedCount} modified file(s)."
@@ -159,6 +231,7 @@ public partial class MainViewModel : ViewModelBase
             }
             StatusMessage = "Refreshed all open roots.";
         }
+        UpdateToolStates();
     }
 
     [RelayCommand]
@@ -179,6 +252,7 @@ public partial class MainViewModel : ViewModelBase
             parent?.RefreshDisplay();
             SelectedNode = null;
             StatusMessage = $"Deleted: {name}";
+            UpdateToolStates();
         }
     }
 
@@ -195,6 +269,7 @@ public partial class MainViewModel : ViewModelBase
             parent?.RefreshDisplay();
             SelectedNode = null;
             StatusMessage = $"Cut: {name}";
+            UpdateToolStates();
         }
     }
 
@@ -206,6 +281,7 @@ public partial class MainViewModel : ViewModelBase
         if (SelectedNode.DataNode.CopyNode())
         {
             StatusMessage = $"Copied: {SelectedNode.DisplayName}";
+            UpdateToolStates();
         }
     }
 
@@ -225,6 +301,7 @@ public partial class MainViewModel : ViewModelBase
                 target.IsExpanded = true;
                 target.ReloadChildren();
                 StatusMessage = $"Pasted tag into {target.DisplayName}";
+                UpdateToolStates();
             }
         }
         else
@@ -242,6 +319,7 @@ public partial class MainViewModel : ViewModelBase
         {
             parent?.ReloadChildren();
             StatusMessage = "Moved tag up.";
+            UpdateToolStates();
         }
     }
 
@@ -254,6 +332,7 @@ public partial class MainViewModel : ViewModelBase
         {
             parent?.ReloadChildren();
             StatusMessage = "Moved tag down.";
+            UpdateToolStates();
         }
     }
 
@@ -275,16 +354,22 @@ public partial class MainViewModel : ViewModelBase
     {
         if (SelectedNode != null)
         {
-            if (SelectedNode.IsContainer && SelectedNode.CanCreateTag(type))
+            if (SelectedNode.IsContainer)
             {
-                return SelectedNode;
+                // If a container is explicitly selected, it must directly support creating that tag type
+                return SelectedNode.CanCreateTag(type) ? SelectedNode : null;
             }
+
+            // If a non-container (e.g. scalar tag) is selected, check if its parent container can accept the tag as a sibling
             if (SelectedNode.ParentViewModel != null && SelectedNode.ParentViewModel.IsContainer && SelectedNode.ParentViewModel.CanCreateTag(type))
             {
                 return SelectedNode.ParentViewModel;
             }
+
+            return null;
         }
 
+        // If nothing is selected, but exactly one root container exists, allow adding to that root
         if (RootNodes.Count == 1 && RootNodes[0].IsContainer && RootNodes[0].CanCreateTag(type))
         {
             return RootNodes[0];
@@ -315,6 +400,7 @@ public partial class MainViewModel : ViewModelBase
         targetContainer.IsExpanded = true;
         targetContainer.ReloadChildren();
         StatusMessage = $"Added {tag.GetTagType()} tag: {(string.IsNullOrEmpty(name) ? "" : name)}";
+        UpdateToolStates();
     }
 
     [RelayCommand]

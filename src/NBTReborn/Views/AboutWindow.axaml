@@ -1,13 +1,15 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         x:Class="NBTReborn.Views.AboutWindow"
+        Icon="/Assets/redstone-nbt.png"
         Title="About Redstone NBT"
-        Width="440" Height="240"
+        Width="460" Height="290"
         CanResize="False"
         WindowStartupLocation="CenterOwner"
         ShowInTaskbar="False">
     <Grid Margin="20" RowDefinitions="*,Auto">
         <StackPanel Grid.Row="0" Spacing="8" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <Image Source="/Assets/redstone-nbt.png" Width="48" Height="48" HorizontalAlignment="Center" Margin="0,0,0,4"/>
             <TextBlock Text="Redstone NBT" FontSize="20" FontWeight="Bold" Foreground="#E1E4EA" HorizontalAlignment="Center"/>
             <TextBlock Text="Modern Cross-Platform Minecraft NBT Editor for Linux, Windows, &amp; macOS" FontSize="12" Opacity="0.85" HorizontalAlignment="Center" TextAlignment="Center" TextWrapping="Wrap"/>
             <TextBlock Text="Rejuvenated &amp; modernized from Justin Aquadro's classic NBTExplorer" FontSize="11" Opacity="0.65" HorizontalAlignment="Center"/>

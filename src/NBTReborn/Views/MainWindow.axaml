@@ -6,7 +6,7 @@
         mc:Ignorable="d" d:DesignWidth="1100" d:DesignHeight="700"
         x:Class="NBTReborn.Views.MainWindow"
         x:DataType="vm:MainViewModel"
-        Icon="/Assets/box.png"
+        Icon="/Assets/redstone-nbt.png"
         Title="Redstone NBT — Modern Minecraft NBT Editor"
         Background="#1E1F22">
 
@@ -21,6 +21,7 @@
             <Setter Property="Height" Value="28"/>
             <Setter Property="HorizontalContentAlignment" Value="Center"/>
             <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="ToolTip.ShowOnDisabled" Value="True"/>
         </Style>
         <Style Selector="Button.toolbtn:pointerover /template/ ContentPresenter">
             <Setter Property="Background" Value="#33373E"/>
@@ -28,9 +29,15 @@
         <Style Selector="Button.toolbtn:pressed /template/ ContentPresenter">
             <Setter Property="Background" Value="#25282D"/>
         </Style>
+        <Style Selector="Button.toolbtn:disabled /template/ ContentPresenter">
+            <Setter Property="Background" Value="Transparent"/>
+        </Style>
         <Style Selector="Button.toolbtn Image">
             <Setter Property="Width" Value="16"/>
             <Setter Property="Height" Value="16"/>
+        </Style>
+        <Style Selector="Button.toolbtn:disabled Image">
+            <Setter Property="Opacity" Value="0.25"/>
         </Style>
         <Style Selector="Separator.toolbarSep">
             <Setter Property="Margin" Value="4,3"/>
@@ -63,23 +70,23 @@
                 <MenuItem Header="Open _Folder..." Click="OpenFolder_Click" InputGesture="Ctrl+Shift+O"/>
                 <MenuItem Header="Open Minecraft Save Folder" Click="OpenMinecraftSaveFolder_Click"/>
                 <Separator/>
-                <MenuItem Header="_Save All" Click="Save_Click" InputGesture="Ctrl+S"/>
-                <MenuItem Header="Save _As..." Click="SaveAs_Click" InputGesture="Ctrl+Shift+S"/>
-                <MenuItem Header="_Refresh" Click="Refresh_Click" InputGesture="F5"/>
+                <MenuItem Header="_Save All" Click="Save_Click" InputGesture="Ctrl+S" IsEnabled="{Binding CanSaveAll}"/>
+                <MenuItem Header="Save _As..." Click="SaveAs_Click" InputGesture="Ctrl+Shift+S" IsEnabled="{Binding CanRefresh}"/>
+                <MenuItem Header="_Refresh" Click="Refresh_Click" InputGesture="F5" IsEnabled="{Binding CanRefresh}"/>
                 <Separator/>
                 <MenuItem Header="_Exit" Click="Exit_Click" InputGesture="Alt+F4"/>
             </MenuItem>
             <MenuItem Header="_Edit">
-                <MenuItem Header="Cu_t" Click="Cut_Click" InputGesture="Ctrl+X"/>
-                <MenuItem Header="_Copy" Click="Copy_Click" InputGesture="Ctrl+C"/>
-                <MenuItem Header="_Paste" Click="Paste_Click" InputGesture="Ctrl+V"/>
+                <MenuItem Header="Cu_t" Click="Cut_Click" InputGesture="Ctrl+X" IsEnabled="{Binding CanCut}"/>
+                <MenuItem Header="_Copy" Click="Copy_Click" InputGesture="Ctrl+C" IsEnabled="{Binding CanCopy}"/>
+                <MenuItem Header="_Paste" Click="Paste_Click" InputGesture="Ctrl+V" IsEnabled="{Binding CanPaste}"/>
                 <Separator/>
-                <MenuItem Header="_Rename" Click="Rename_Click" InputGesture="Ctrl+R"/>
-                <MenuItem Header="_Edit Value" Click="EditValue_Click" InputGesture="Ctrl+E"/>
-                <MenuItem Header="_Delete" Click="Delete_Click" InputGesture="Delete"/>
+                <MenuItem Header="_Rename" Click="Rename_Click" InputGesture="Ctrl+R" IsEnabled="{Binding CanRename}"/>
+                <MenuItem Header="_Edit Value" Click="EditValue_Click" InputGesture="Ctrl+E" IsEnabled="{Binding CanEditValue}"/>
+                <MenuItem Header="_Delete" Click="Delete_Click" InputGesture="Delete" IsEnabled="{Binding CanDelete}"/>
                 <Separator/>
-                <MenuItem Header="Move _Up" Click="MoveUp_Click" InputGesture="Ctrl+Up"/>
-                <MenuItem Header="Move Dow_n" Click="MoveDown_Click" InputGesture="Ctrl+Down"/>
+                <MenuItem Header="Move _Up" Click="MoveUp_Click" InputGesture="Ctrl+Up" IsEnabled="{Binding CanMoveUp}"/>
+                <MenuItem Header="Move Dow_n" Click="MoveDown_Click" InputGesture="Ctrl+Down" IsEnabled="{Binding CanMoveDown}"/>
             </MenuItem>
             <MenuItem Header="_Search">
                 <MenuItem Header="_Find..." Click="FocusSearchBox_Click" InputGesture="Ctrl+F"/>
@@ -105,76 +112,76 @@
                     <Button Classes="toolbtn" ToolTip.Tip="Open Folder (Ctrl+Shift+O)" Click="OpenFolder_Click">
                         <Image Source="/Assets/folder-open.png"/>
                     </Button>
-                    <Button Classes="toolbtn" ToolTip.Tip="Save All (Ctrl+S)" Click="Save_Click">
+                    <Button Classes="toolbtn" ToolTip.Tip="Save All (Ctrl+S)" Click="Save_Click" IsEnabled="{Binding CanSaveAll}">
                         <Image Source="/Assets/disk.png"/>
                     </Button>
-                    <Button Classes="toolbtn" ToolTip.Tip="Refresh (F5)" Click="Refresh_Click">
+                    <Button Classes="toolbtn" ToolTip.Tip="Refresh (F5)" Click="Refresh_Click" IsEnabled="{Binding CanRefresh}">
                         <Image Source="/Assets/arrow-circle-double-135.png"/>
                     </Button>
 
                     <Separator Classes="toolbarSep"/>
 
                     <!-- Clipboard Operations -->
-                    <Button Classes="toolbtn" ToolTip.Tip="Cut (Ctrl+X)" Click="Cut_Click">
+                    <Button Classes="toolbtn" ToolTip.Tip="Cut (Ctrl+X)" Click="Cut_Click" IsEnabled="{Binding CanCut}">
                         <Image Source="/Assets/scissors.png"/>
                     </Button>
-                    <Button Classes="toolbtn" ToolTip.Tip="Copy (Ctrl+C)" Click="Copy_Click">
+                    <Button Classes="toolbtn" ToolTip.Tip="Copy (Ctrl+C)" Click="Copy_Click" IsEnabled="{Binding CanCopy}">
                         <Image Source="/Assets/document-copy.png"/>
                     </Button>
-                    <Button Classes="toolbtn" ToolTip.Tip="Paste (Ctrl+V)" Click="Paste_Click">
+                    <Button Classes="toolbtn" ToolTip.Tip="Paste (Ctrl+V)" Click="Paste_Click" IsEnabled="{Binding CanPaste}">
                         <Image Source="/Assets/clipboard-paste.png"/>
                     </Button>
 
                     <Separator Classes="toolbarSep"/>
 
                     <!-- Tag Modification -->
-                    <Button Classes="toolbtn" ToolTip.Tip="Rename (Ctrl+R)" Click="Rename_Click">
+                    <Button Classes="toolbtn" ToolTip.Tip="Rename (Ctrl+R)" Click="Rename_Click" IsEnabled="{Binding CanRename}">
                         <Image Source="/Assets/edit-replace.png"/>
                     </Button>
-                    <Button Classes="toolbtn" ToolTip.Tip="Edit Value (Ctrl+E / Enter)" Click="EditValue_Click">
+                    <Button Classes="toolbtn" ToolTip.Tip="Edit Value (Ctrl+E / Enter)" Click="EditValue_Click" IsEnabled="{Binding CanEditValue}">
                         <Image Source="/Assets/pencil.png"/>
                     </Button>
-                    <Button Classes="toolbtn" ToolTip.Tip="Delete (Delete)" Click="Delete_Click">
+                    <Button Classes="toolbtn" ToolTip.Tip="Delete (Delete)" Click="Delete_Click" IsEnabled="{Binding CanDelete}">
                         <Image Source="/Assets/cross.png"/>
                     </Button>
 
                     <Separator Classes="toolbarSep"/>
 
                     <!-- 12 Tag Types -->
-                    <Button Classes="toolbtn" ToolTip.Tip="Add Byte Tag" Click="AddByte_Click">
+                    <Button Classes="toolbtn" ToolTip.Tip="Add Byte Tag" Click="AddByte_Click" IsEnabled="{Binding CanAddByte}">
                         <Image Source="/Assets/document-attribute-b.png"/>
                     </Button>
-                    <Button Classes="toolbtn" ToolTip.Tip="Add Short Tag" Click="AddShort_Click">
+                    <Button Classes="toolbtn" ToolTip.Tip="Add Short Tag" Click="AddShort_Click" IsEnabled="{Binding CanAddShort}">
                         <Image Source="/Assets/document-attribute-s.png"/>
                     </Button>
-                    <Button Classes="toolbtn" ToolTip.Tip="Add Int Tag" Click="AddInt_Click">
+                    <Button Classes="toolbtn" ToolTip.Tip="Add Int Tag" Click="AddInt_Click" IsEnabled="{Binding CanAddInt}">
                         <Image Source="/Assets/document-attribute-i.png"/>
                     </Button>
-                    <Button Classes="toolbtn" ToolTip.Tip="Add Long Tag" Click="AddLong_Click">
+                    <Button Classes="toolbtn" ToolTip.Tip="Add Long Tag" Click="AddLong_Click" IsEnabled="{Binding CanAddLong}">
                         <Image Source="/Assets/document-attribute-l.png"/>
                     </Button>
-                    <Button Classes="toolbtn" ToolTip.Tip="Add Float Tag" Click="AddFloat_Click">
+                    <Button Classes="toolbtn" ToolTip.Tip="Add Float Tag" Click="AddFloat_Click" IsEnabled="{Binding CanAddFloat}">
                         <Image Source="/Assets/document-attribute-f.png"/>
                     </Button>
-                    <Button Classes="toolbtn" ToolTip.Tip="Add Double Tag" Click="AddDouble_Click">
+                    <Button Classes="toolbtn" ToolTip.Tip="Add Double Tag" Click="AddDouble_Click" IsEnabled="{Binding CanAddDouble}">
                         <Image Source="/Assets/document-attribute-d.png"/>
                     </Button>
-                    <Button Classes="toolbtn" ToolTip.Tip="Add Byte Array Tag" Click="AddByteArray_Click">
+                    <Button Classes="toolbtn" ToolTip.Tip="Add Byte Array Tag" Click="AddByteArray_Click" IsEnabled="{Binding CanAddByteArray}">
                         <Image Source="/Assets/edit-code-b.png"/>
                     </Button>
-                    <Button Classes="toolbtn" ToolTip.Tip="Add Int Array Tag" Click="AddIntArray_Click">
+                    <Button Classes="toolbtn" ToolTip.Tip="Add Int Array Tag" Click="AddIntArray_Click" IsEnabled="{Binding CanAddIntArray}">
                         <Image Source="/Assets/edit-code-i.png"/>
                     </Button>
-                    <Button Classes="toolbtn" ToolTip.Tip="Add Long Array Tag" Click="AddLongArray_Click">
+                    <Button Classes="toolbtn" ToolTip.Tip="Add Long Array Tag" Click="AddLongArray_Click" IsEnabled="{Binding CanAddLongArray}">
                         <Image Source="/Assets/edit-code-l.png"/>
                     </Button>
-                    <Button Classes="toolbtn" ToolTip.Tip="Add String Tag" Click="AddString_Click">
+                    <Button Classes="toolbtn" ToolTip.Tip="Add String Tag" Click="AddString_Click" IsEnabled="{Binding CanAddString}">
                         <Image Source="/Assets/edit-small-caps.png"/>
                     </Button>
-                    <Button Classes="toolbtn" ToolTip.Tip="Add List Tag" Click="AddList_Click">
+                    <Button Classes="toolbtn" ToolTip.Tip="Add List Tag" Click="AddList_Click" IsEnabled="{Binding CanAddList}">
                         <Image Source="/Assets/edit-list.png"/>
                     </Button>
-                    <Button Classes="toolbtn" ToolTip.Tip="Add Compound Tag" Click="AddCompound_Click">
+                    <Button Classes="toolbtn" ToolTip.Tip="Add Compound Tag" Click="AddCompound_Click" IsEnabled="{Binding CanAddCompound}">
                         <Image Source="/Assets/folder-open.png"/>
                     </Button>
                 </WrapPanel>
@@ -182,13 +189,14 @@
                 <!-- Compact Toolbar Search (Right Aligned) -->
                 <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="4" VerticalAlignment="Center" Margin="12,0,4,0">
                     <Image Source="/Assets/binocular.png" Width="16" Height="16" VerticalAlignment="Center" Margin="0,0,2,0"/>
-                    <TextBox x:Name="ToolbarSearchBox" Width="180" Height="26" Padding="6,3"
+                    <TextBox x:Name="ToolbarSearchBox" Width="190" Height="28" Padding="8,2"
                              PlaceholderText="Search"
                              Text="{Binding SearchQuery}"
                              KeyDown="SearchBox_KeyDown"
                              VerticalAlignment="Center"
+                             VerticalContentAlignment="Center"
                              CornerRadius="3"
-                             FontSize="12"
+                             FontSize="14"
                              Background="#1B1C1E"
                              BorderBrush="#383C44"/>
                     <Button Classes="toolbtn" ToolTip.Tip="Find Next (F3)" Command="{Binding FindNextCommand}">

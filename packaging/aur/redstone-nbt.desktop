@@ -1,0 +1,12 @@
+[Desktop Entry]
+Name=Redstone NBT
+GenericName=Minecraft NBT Editor
+Comment=Modern Cross-Platform Minecraft NBT & World Editor
+Exec=redstone-nbt %F
+Icon=redstone-nbt
+Terminal=false
+Type=Application
+Categories=Utility;Development;Game;
+MimeType=application/x-nbt;application/x-minecraft-region;application/x-minecraft-level;
+Keywords=minecraft;nbt;mca;mcr;dat;schematic;schem;mcstructure;editor;redstone;
+StartupWMClass=Redstone NBT
