@@ -1,19 +1,19 @@
-# Maintainer: Raul <raul@local>
+# Maintainer: Raul1x9 <raul@local>
 pkgname=redstone-nbt-bin
 _pkgname=redstone-nbt
 pkgver=1.0.0
 pkgrel=1
 pkgdesc="Modern cross-platform Minecraft NBT editor revived from NBTExplorer"
 arch=('x86_64')
-url="https://github.com/Raul/RedstoneNBT"
-license=('MIT')
+url="https://github.com/Raul1x9/RedstoneNBT"
+license=('GPL-3.0-or-later')
 depends=('dotnet-runtime-10.0' 'fontconfig' 'libx11' 'libice' 'libsm')
 optdepends=('libxcursor: Wayland and X11 cursor support')
 provides=('redstone-nbt')
 conflicts=('redstone-nbt')
-source=("redstone-nbt-${pkgver}-linux-x64.tar.gz"
+source=("https://github.com/Raul1x9/RedstoneNBT/releases/download/v${pkgver}/redstone-nbt-${pkgver}-linux-x64.tar.gz"
         "redstone-nbt.desktop")
-sha256sums=('c5cf7f9e37cffbcd6d1483b11c1eb3e8b7c42bf5e43b55c20e185e36ba7af40d'
+sha256sums=('aab2326f0b7f32d1ca4f81ab8c1d4c879228970842083ea013d4f325f0890e95'
             'dacf40ad9682447f796fc723be007c9058c367768e9d6ff088d4834276a4b705')
 
 package() {

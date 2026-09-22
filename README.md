@@ -6,7 +6,7 @@
 
 ### Modern, High-Performance, Cross-Platform Minecraft NBT & World Editor
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](LICENSE)
 [![.NET](https://img.shields.io/badge/.NET-10.0-512BD4.svg)](https://dotnet.microsoft.com/)
 [![Avalonia UI](https://img.shields.io/badge/UI-Avalonia%2012-7052FF.svg)](https://avaloniaui.net/)
 [![Platform](https://img.shields.io/badge/Platform-Linux%20%7C%20Windows%20%7C%20macOS-blue.svg)](#installation--downloads)
@@ -73,7 +73,7 @@ Whether you are debugging custom worlds, inspecting chunk sections in Anvil `.mc
 
 ## 🚀 Installation & Downloads
 
-Pre-built standalone releases for all platforms are available on the [Releases Page](https://github.com/Raul/RedstoneNBT/releases).
+Pre-built standalone releases for all platforms are available on the [Releases Page](https://github.com/Raul1x9/RedstoneNBT/releases).
 
 ### 🐧 Linux
 
@@ -113,7 +113,14 @@ cd redstone-nbt-1.0.0-linux-x64
 
 ### 🍎 macOS
 
-1. Download the archive matching your Mac's CPU:
+#### Option 1: Homebrew
+```bash
+brew tap Raul1x9/tap
+brew install redstone-nbt
+```
+
+#### Option 2: Standalone Archive
+1. Download the archive matching your Mac's architecture:
    - Apple Silicon (M1/M2/M3/M4): `redstone-nbt-1.0.0-osx-arm64.tar.gz`
    - Intel Macs: `redstone-nbt-1.0.0-osx-x64.tar.gz`
 2. Extract the archive and launch `./redstone-nbt`.
@@ -127,7 +134,7 @@ cd redstone-nbt-1.0.0-linux-x64
 
 ### Clone & Build
 ```bash
-git clone https://github.com/Raul/RedstoneNBT.git
+git clone https://github.com/Raul1x9/RedstoneNBT.git
 cd RedstoneNBT
 
 # Restore and build the entire solution
@@ -147,11 +154,11 @@ To cross-compile and generate all release archives (`.tar.gz`, `.zip`, `.deb`):
 
 ## 📜 License & Credits
 
-- **Original Author**: Justin Aquadro ([@jaquadro](https://github.com/jaquadro)), creator of the original [NBTExplorer](https://github.com/jaquadro/NBTExplorer) and [Substrate](https://github.com/jaquadro/Substrate) library.
-- **Redstone NBT Contributors**: Modernized, redesigned, and maintained by Raul and contributors.
-- **License**: Released under the permissive **[MIT License](LICENSE)**.
+- **Author & Maintainer**: Raul1x9 ([@Raul1x9](https://github.com/Raul1x9)) & Redstone NBT Contributors.
+- **Original Upstream Author**: Justin Aquadro ([@jaquadro](https://github.com/jaquadro)), creator of the original [NBTExplorer](https://github.com/jaquadro/NBTExplorer) and [Substrate](https://github.com/jaquadro/Substrate) library (licensed under MIT).
+- **License**: Released under the **[GNU General Public License v3.0 (GPLv3)](LICENSE)**.
 
 ```text
-Copyright (c) 2011 Justin Aquadro
-Copyright (c) 2026 Redstone NBT Contributors
+Copyright (C) 2026 Raul1x9 and Redstone NBT Contributors
+Copyright (C) 2011 Justin Aquadro (NBTExplorer & Substrate upstream components)
 ```

@@ -5,3 +5,6 @@ obj/
 .vs/
 .idea/
 .vscode/
+*.swp
+.*.swp
+*~

@@ -14,6 +14,7 @@
             <TextBlock Text="Modern Cross-Platform Minecraft NBT Editor for Linux, Windows, &amp; macOS" FontSize="12" Opacity="0.85" HorizontalAlignment="Center" TextAlignment="Center" TextWrapping="Wrap"/>
             <TextBlock Text="Rejuvenated &amp; modernized from Justin Aquadro's classic NBTExplorer" FontSize="11" Opacity="0.65" HorizontalAlignment="Center"/>
             <TextBlock Text="Universal support: Java (.mca, .mcr, .dat, .nbt, .schematic) &amp; Bedrock (.mcstructure, level.dat)" FontSize="11" Opacity="0.65" HorizontalAlignment="Center" TextAlignment="Center" TextWrapping="Wrap"/>
+            <TextBlock Text="Licensed under GNU GPLv3 — Copyright © 2026 Raul1x9" FontSize="11" Opacity="0.75" Foreground="#61AFEF" HorizontalAlignment="Center"/>
             <TextBlock Text="Built with .NET 10 &amp; Avalonia UI" FontSize="11" Opacity="0.5" HorizontalAlignment="Center"/>
         </StackPanel>
 
