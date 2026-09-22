@@ -25,6 +25,7 @@ Whether you are debugging custom worlds, inspecting chunk sections in Anvil `.mc
 
 ## ✨ Key Features & Modern Improvements
 
+- 📥 **Seamless Drag & Drop**: Drag and drop any Minecraft NBT files, region files, or entire world folders directly anywhere onto the window to open them immediately (single or multiple items simultaneously).
 - ⚡ **In-Place Inline Value Editing**: Click any scalar tag value (or press `Enter` / `F2`) to edit values directly within the tree view row — no more annoying modal popups for simple integer, float, or string adjustments.
 - 🎨 **Context-Aware Dynamic Toolbar**: Tools automatically gray out and disable when not applicable (e.g. invalid tag additions on typed lists, editing non-scalar containers, or saving when no changes exist).
 - 💾 **Reactive Unsaved State Indicator**: The floppy disk icon dims when clean and lights up dynamically as soon as any open file, chunk, or tag is modified.

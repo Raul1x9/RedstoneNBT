@@ -103,10 +103,20 @@ public partial class MainViewModel : ViewModelBase
         OnPropertyChanged(nameof(CanAddCompound));
     }
 
+    public bool HasNodes => RootNodes.Count > 0;
+    public bool HasNoNodes => RootNodes.Count == 0;
+
     #endregion
 
     public MainViewModel()
     {
+        RootNodes.CollectionChanged += (s, e) =>
+        {
+            OnPropertyChanged(nameof(HasNodes));
+            OnPropertyChanged(nameof(HasNoNodes));
+            UpdateToolStates();
+        };
+
         StatusMessage = "Welcome to Redstone NBT — Modern Minecraft NBT Editor";
         UpdateToolStates();
     }

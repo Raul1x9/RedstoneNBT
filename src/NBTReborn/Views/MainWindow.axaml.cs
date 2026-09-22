@@ -19,7 +19,84 @@ public partial class MainWindow : Window
     public MainWindow()
     {
         InitializeComponent();
+        AddHandler(DragDrop.DropEvent, Window_Drop, Avalonia.Interactivity.RoutingStrategies.Bubble | Avalonia.Interactivity.RoutingStrategies.Tunnel, true);
+        AddHandler(DragDrop.DragOverEvent, Window_DragOver, Avalonia.Interactivity.RoutingStrategies.Bubble | Avalonia.Interactivity.RoutingStrategies.Tunnel, true);
     }
+
+    #region Drag and Drop File Opening
+
+    private void Window_DragOver(object? sender, DragEventArgs e)
+    {
+        if (e.DataTransfer.Contains(DataFormat.File))
+        {
+            e.DragEffects = DragDropEffects.Copy;
+            e.Handled = true;
+        }
+        else
+        {
+            e.DragEffects = DragDropEffects.None;
+        }
+    }
+
+    private void Window_Drop(object? sender, DragEventArgs e)
+    {
+        if (DataContext is not MainViewModel vm) return;
+
+        var items = new List<IStorageItem>();
+        var files = e.DataTransfer.TryGetFiles();
+        if (files != null && files.Length > 0)
+        {
+            items.AddRange(files);
+        }
+        else
+        {
+            var single = e.DataTransfer.TryGetFile();
+            if (single != null) items.Add(single);
+        }
+
+        if (items.Count > 0)
+        {
+            int openedCount = 0;
+            string lastOpened = string.Empty;
+
+            foreach (var item in items)
+            {
+                string? path = item.TryGetLocalPath();
+                if (string.IsNullOrEmpty(path) && item.Path != null && item.Path.IsFile)
+                {
+                    path = item.Path.LocalPath;
+                }
+
+                if (string.IsNullOrEmpty(path)) continue;
+
+                if (Directory.Exists(path))
+                {
+                    vm.OpenFolder(path);
+                    openedCount++;
+                    lastOpened = Path.GetFileName(path);
+                }
+                else if (File.Exists(path))
+                {
+                    vm.OpenFile(path);
+                    openedCount++;
+                    lastOpened = Path.GetFileName(path);
+                }
+            }
+
+            if (openedCount > 1)
+            {
+                vm.StatusMessage = $"Opened {openedCount} items from drag & drop.";
+            }
+            else if (openedCount == 1)
+            {
+                vm.StatusMessage = $"Opened: {lastOpened}";
+            }
+
+            e.Handled = true;
+        }
+    }
+
+    #endregion
 
     #region Search Navigation & Auto-Scrolling
 

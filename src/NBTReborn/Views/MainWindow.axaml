@@ -8,7 +8,8 @@
         x:DataType="vm:MainViewModel"
         Icon="/Assets/redstone-nbt.png"
         Title="Redstone NBT — Modern Minecraft NBT Editor"
-        Background="#1E1F22">
+        Background="#1E1F22"
+        DragDrop.AllowDrop="True">
 
     <Window.Styles>
         <!-- Native Dark High-Productivity Toolbar Buttons -->
@@ -285,6 +286,28 @@
                     </TreeDataTemplate>
                 </TreeView.ItemTemplate>
             </TreeView>
+
+            <!-- Empty State / Drag & Drop Target Overlay -->
+            <Border Grid.Column="0" IsVisible="{Binding HasNoNodes}"
+                    Background="Transparent"
+                    IsHitTestVisible="False"
+                    HorizontalAlignment="Center" VerticalAlignment="Center">
+                <Border Background="#212328" BorderBrush="#363A42" BorderThickness="1"
+                        CornerRadius="10" Padding="32,24" MaxWidth="500">
+                    <StackPanel Spacing="10" HorizontalAlignment="Center">
+                        <Image Source="/Assets/redstone-nbt.png" Width="48" Height="48" HorizontalAlignment="Center" Opacity="0.85"/>
+                        <TextBlock Text="Drop Minecraft NBT or Region files here"
+                                   FontSize="15" FontWeight="SemiBold"
+                                   Foreground="#ECEFF4" HorizontalAlignment="Center"/>
+                        <TextBlock Text="Supports .dat, .nbt, .mca, .mcr, .schematic, .schem, .mcstructure, and World folders"
+                                   FontSize="12" Foreground="#8892B0"
+                                   TextWrapping="Wrap" TextAlignment="Center" HorizontalAlignment="Center"/>
+                        <TextBlock Text="Or use File → Open (Ctrl+O) / New (Ctrl+N)"
+                                   FontSize="12" Foreground="#61AFEF"
+                                   HorizontalAlignment="Center" Margin="0,4,0,0"/>
+                    </StackPanel>
+                </Border>
+            </Border>
 
             <!-- Splitter (Visible ONLY when search results are open) -->
             <GridSplitter Grid.Column="1" Width="4" HorizontalAlignment="Stretch"
