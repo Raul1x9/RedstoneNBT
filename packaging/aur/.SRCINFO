@@ -16,6 +16,6 @@ pkgbase = redstone-nbt-bin
 	source = https://github.com/Raul1x9/RedstoneNBT/releases/download/v1.0.0/redstone-nbt-1.0.0-linux-x64.tar.gz
 	source = redstone-nbt.desktop
 	sha256sums = bf8ea746376febe49e2017924e81f3348d0447c631eb526eb4ea440575475443
-	sha256sums = dacf40ad9682447f796fc723be007c9058c367768e9d6ff088d4834276a4b705
+	sha256sums = 72fd6080dcc99e6bcc52540ebe8a8dbb31825d3e9412b4c4545244fa4329469d
 
 pkgname = redstone-nbt-bin
