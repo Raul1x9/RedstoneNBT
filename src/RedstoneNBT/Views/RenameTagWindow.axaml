@@ -1,20 +1,17 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        x:Class="NBTReborn.Views.EditValueWindow"
-        Title="Edit Value"
-        Width="440" Height="230"
+        x:Class="RedstoneNBT.Views.RenameTagWindow"
+        Title="Rename Tag"
+        Width="400" Height="200"
         CanResize="False"
         WindowStartupLocation="CenterOwner"
         ShowInTaskbar="False">
     <Grid Margin="16" RowDefinitions="Auto,*,Auto">
-        <StackPanel Grid.Row="0" Spacing="6">
-            <TextBlock x:Name="TagInfoText" Text="Edit Tag" FontWeight="SemiBold" FontSize="14"/>
-            <TextBlock x:Name="TagNameText" Text="Name: " Opacity="0.75" FontSize="12"/>
-        </StackPanel>
+        <TextBlock Grid.Row="0" Text="Rename Tag" FontWeight="SemiBold" FontSize="14" Margin="0,0,0,10"/>
 
         <StackPanel Grid.Row="1" Spacing="4" VerticalAlignment="Center">
-            <TextBlock Text="Value:" FontWeight="SemiBold"/>
-            <TextBox x:Name="ValueTextBox" PlaceholderText="Enter value" TextChanged="ValueTextBox_TextChanged"/>
+            <TextBlock Text="New Name:" FontWeight="SemiBold"/>
+            <TextBox x:Name="NameTextBox" PlaceholderText="Enter tag name" TextChanged="NameTextBox_TextChanged"/>
             <TextBlock x:Name="ErrorText" Foreground="#FF5555" FontSize="11" IsVisible="False"/>
         </StackPanel>
 

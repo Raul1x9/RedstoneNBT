@@ -8,7 +8,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using NBTExplorer.Model;
 using Substrate.Nbt;
 
-namespace NBTReborn.ViewModels;
+namespace RedstoneNBT.ViewModels;
 
 public partial class NodeViewModel : ObservableObject
 {
@@ -385,7 +385,7 @@ public partial class NodeViewModel : ObservableObject
 
         try
         {
-            var uri = new System.Uri($"avares://NBTReborn/Assets/{iconName}");
+            var uri = new System.Uri($"avares://RedstoneNBT/Assets/{iconName}");
             if (AssetLoader.Exists(uri))
             {
                 using var stream = AssetLoader.Open(uri);

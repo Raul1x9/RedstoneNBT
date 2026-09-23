@@ -1,7 +1,7 @@
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 
-namespace NBTReborn.Views;
+namespace RedstoneNBT.Views;
 
 public partial class AboutWindow : Window
 {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 
-namespace NBTReborn.Views;
+namespace RedstoneNBT.Views;
 
 public partial class RenameTagWindow : Window
 {

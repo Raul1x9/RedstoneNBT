@@ -10,7 +10,7 @@ using NBTModel.Interop;
 using Substrate.Core;
 using Substrate.Nbt;
 
-namespace NBTReborn.ViewModels;
+namespace RedstoneNBT.ViewModels;
 
 public partial class MainViewModel : ViewModelBase
 {

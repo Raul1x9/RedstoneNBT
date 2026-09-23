@@ -2,7 +2,7 @@
 
 <div align="center">
 
-<img src="src/NBTReborn/Assets/redstone-nbt-256.png" alt="Redstone NBT Icon" width="128" height="128" />
+<img src="src/RedstoneNBT/Assets/redstone-nbt-256.png" alt="Redstone NBT Icon" width="128" height="128" />
 
 ### Modern, High-Performance, Cross-Platform Minecraft NBT & World Editor
 
@@ -107,7 +107,7 @@ cd redstone-nbt-1.0.0-linux-x64
 
 1. Download `redstone-nbt-1.0.0-win-x64.zip` from the Releases page.
 2. Extract the archive anywhere on your PC.
-3. Launch `redstone-nbt.exe` (or `NBTReborn.exe`).
+3. Launch `redstone-nbt.exe` (or `RedstoneNBT.exe`).
 
 ---
 
@@ -138,10 +138,10 @@ git clone https://github.com/Raul1x9/RedstoneNBT.git
 cd RedstoneNBT
 
 # Restore and build the entire solution
-dotnet build NBTReborn.sln
+dotnet build RedstoneNBT.sln
 
 # Run directly
-dotnet run --project src/NBTReborn/NBTReborn.csproj
+dotnet run --project src/RedstoneNBT/RedstoneNBT.csproj
 ```
 
 ### Packaging All Distributions

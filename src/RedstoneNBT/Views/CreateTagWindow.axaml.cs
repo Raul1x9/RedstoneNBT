@@ -5,7 +5,7 @@ using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Substrate.Nbt;
 
-namespace NBTReborn.Views;
+namespace RedstoneNBT.Views;
 
 public partial class CreateTagWindow : Window
 {

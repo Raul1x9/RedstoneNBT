@@ -6,6 +6,8 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <Product>Redstone NBT</Product>
     <AssemblyTitle>Redstone NBT</AssemblyTitle>
+    <AssemblyName>RedstoneNBT</AssemblyName>
+    <RootNamespace>RedstoneNBT</RootNamespace>
     <Title>Redstone NBT</Title>
     <Description>Modern Cross-Platform Minecraft NBT Editor</Description>
     <ApplicationIcon>Assets/redstone-nbt.ico</ApplicationIcon>

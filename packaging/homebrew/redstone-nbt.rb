@@ -7,14 +7,14 @@ class RedstoneNbt < Formula
   if OS.mac?
     if Hardware::CPU.arm?
       url "https://github.com/Raul1x9/RedstoneNBT/releases/download/v1.0.0/redstone-nbt-1.0.0-osx-arm64.tar.gz"
-      sha256 "a13aa2cbc4cf49aaabc1308c3d14ddbc0196b5ca7b24d6626f1110635c9d5aa4"
+      sha256 "edbecadf10a9a9ef5f0f8a35edc3ff7e1199472d448a80fd77e657b3b482d8c8"
     else
       url "https://github.com/Raul1x9/RedstoneNBT/releases/download/v1.0.0/redstone-nbt-1.0.0-osx-x64.tar.gz"
-      sha256 "ece4b4243cd53a4e890282354090d5f9fe6fbcff859fe75835392ebaf342afa0"
+      sha256 "6725c65adadb9f0767d49648328f12f2f312ec481d65a5716baba7f041952b9d"
     end
   elsif OS.linux?
     url "https://github.com/Raul1x9/RedstoneNBT/releases/download/v1.0.0/redstone-nbt-1.0.0-linux-x64.tar.gz"
-    sha256 "aab2326f0b7f32d1ca4f81ab8c1d4c879228970842083ea013d4f325f0890e95"
+    sha256 "bf8ea746376febe49e2017924e81f3348d0447c631eb526eb4ea440575475443"
   end
 
   def install

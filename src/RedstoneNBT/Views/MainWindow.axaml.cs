@@ -8,11 +8,11 @@ using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Platform.Storage;
 using NBTExplorer.Model;
-using NBTReborn.ViewModels;
+using RedstoneNBT.ViewModels;
 using Substrate.Core;
 using Substrate.Nbt;
 
-namespace NBTReborn.Views;
+namespace RedstoneNBT.Views;
 
 public partial class MainWindow : Window
 {

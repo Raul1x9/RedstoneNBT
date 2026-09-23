@@ -1,4 +1,4 @@
-﻿
+
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
@@ -9,7 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Substrate", "src\Substrate\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NBTModel", "src\NBTModel\NBTModel.csproj", "{E3F4F24C-EEB1-4DC7-AB17-81032EBA50AF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NBTReborn", "src\NBTReborn\NBTReborn.csproj", "{75A49E0F-1DCD-41E6-8033-AFFABBB35A44}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RedstoneNBT", "src\RedstoneNBT\RedstoneNBT.csproj", "{75A49E0F-1DCD-41E6-8033-AFFABBB35A44}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

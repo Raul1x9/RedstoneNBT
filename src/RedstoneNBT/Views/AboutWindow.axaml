@@ -1,6 +1,6 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        x:Class="NBTReborn.Views.AboutWindow"
+        x:Class="RedstoneNBT.Views.AboutWindow"
         Icon="/Assets/redstone-nbt.png"
         Title="About Redstone NBT"
         Width="460" Height="290"

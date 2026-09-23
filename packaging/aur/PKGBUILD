@@ -13,7 +13,7 @@ provides=('redstone-nbt')
 conflicts=('redstone-nbt')
 source=("https://github.com/Raul1x9/RedstoneNBT/releases/download/v${pkgver}/redstone-nbt-${pkgver}-linux-x64.tar.gz"
         "redstone-nbt.desktop")
-sha256sums=('aab2326f0b7f32d1ca4f81ab8c1d4c879228970842083ea013d4f325f0890e95'
+sha256sums=('bf8ea746376febe49e2017924e81f3348d0447c631eb526eb4ea440575475443'
             'dacf40ad9682447f796fc723be007c9058c367768e9d6ff088d4834276a4b705')
 
 package() {
@@ -25,7 +25,7 @@ package() {
 
     cp -a "${srcdir}/redstone-nbt-${pkgver}-linux-x64/"* "${pkgdir}/usr/lib/${_pkgname}/"
     chmod +x "${pkgdir}/usr/lib/${_pkgname}/redstone-nbt"
-    chmod +x "${pkgdir}/usr/lib/${_pkgname}/NBTReborn"
+    chmod +x "${pkgdir}/usr/lib/${_pkgname}/RedstoneNBT"
 
     ln -s "/usr/lib/${_pkgname}/redstone-nbt" "${pkgdir}/usr/bin/${_pkgname}"
 

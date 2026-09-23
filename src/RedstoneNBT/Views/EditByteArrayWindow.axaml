@@ -1,6 +1,6 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        x:Class="NBTReborn.Views.EditByteArrayWindow"
+        x:Class="RedstoneNBT.Views.EditByteArrayWindow"
         Title="Edit Array"
         Width="500" Height="320"
         CanResize="True"
