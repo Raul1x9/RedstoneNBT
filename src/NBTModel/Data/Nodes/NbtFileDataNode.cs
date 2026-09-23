@@ -169,8 +169,9 @@ namespace NBTExplorer.Model
             }
 
             var list = new SortedList<TagKey, TagNode>();
+            int idx = 0;
             foreach (var item in _tree.Root) {
-                list.Add(new TagKey(item.Key, item.Value.GetTagType()), item.Value);
+                list.Add(new TagKey(item.Key, item.Value.GetTagType(), idx++), item.Value);
             }
 
             foreach (TagNode tag in list.Values) {

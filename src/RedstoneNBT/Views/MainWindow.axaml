@@ -93,6 +93,41 @@
                 <MenuItem Header="_Find..." Click="FocusSearchBox_Click" InputGesture="Ctrl+F"/>
                 <MenuItem Header="Find _Next" Click="FindNext_Click" InputGesture="F3"/>
             </MenuItem>
+            <MenuItem Header="_View">
+                <MenuItem Header="_Sort Order">
+                    <MenuItem Header="Group Containers First (Default)" 
+                              Command="{Binding SetSortModeCommand}" 
+                              CommandParameter="ContainersFirst">
+                        <MenuItem.Icon>
+                            <TextBlock Text="✓" IsVisible="{Binding IsSortContainersFirst}" VerticalAlignment="Center" FontWeight="Bold"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Header="Alphabetical (A to Z)" 
+                              Command="{Binding SetSortModeCommand}" 
+                              CommandParameter="Alphabetical">
+                        <MenuItem.Icon>
+                            <TextBlock Text="✓" IsVisible="{Binding IsSortAlphabetical}" VerticalAlignment="Center" FontWeight="Bold"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Header="By Tag Type" 
+                              Command="{Binding SetSortModeCommand}" 
+                              CommandParameter="TagType">
+                        <MenuItem.Icon>
+                            <TextBlock Text="✓" IsVisible="{Binding IsSortTagType}" VerticalAlignment="Center" FontWeight="Bold"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Header="File Order (Original)" 
+                              Command="{Binding SetSortModeCommand}" 
+                              CommandParameter="FileOrder">
+                        <MenuItem.Icon>
+                            <TextBlock Text="✓" IsVisible="{Binding IsSortFileOrder}" VerticalAlignment="Center" FontWeight="Bold"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                </MenuItem>
+                <Separator/>
+                <MenuItem Header="_Expand All" Click="ExpandAll_Click"/>
+                <MenuItem Header="_Collapse All" Click="CollapseAll_Click"/>
+            </MenuItem>
             <MenuItem Header="_Help">
                 <MenuItem Header="_About Redstone NBT" Click="About_Click"/>
             </MenuItem>

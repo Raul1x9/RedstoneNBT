@@ -635,6 +635,58 @@ public partial class MainWindow : Window
         about.ShowDialog(this);
     }
 
+    private void ExpandAll_Click(object? sender, RoutedEventArgs e)
+    {
+        if (DataContext is not MainViewModel vm) return;
+        var targetNodes = vm.SelectedNode != null 
+            ? new[] { vm.SelectedNode } 
+            : vm.RootNodes.ToArray();
+
+        foreach (var node in targetNodes)
+        {
+            ExpandRecursive(node, 0, 5);
+        }
+    }
+
+    private static void ExpandRecursive(NodeViewModel node, int depth, int maxDepth)
+    {
+        if (depth > maxDepth) return;
+        node.IsExpanded = true;
+        node.LoadChildren();
+        foreach (var child in node.Children)
+        {
+            if (child is not DummyNodeViewModel)
+            {
+                ExpandRecursive(child, depth + 1, maxDepth);
+            }
+        }
+    }
+
+    private void CollapseAll_Click(object? sender, RoutedEventArgs e)
+    {
+        if (DataContext is not MainViewModel vm) return;
+        var targetNodes = vm.SelectedNode != null 
+            ? new[] { vm.SelectedNode } 
+            : vm.RootNodes.ToArray();
+
+        foreach (var node in targetNodes)
+        {
+            CollapseRecursive(node);
+        }
+    }
+
+    private static void CollapseRecursive(NodeViewModel node)
+    {
+        foreach (var child in node.Children)
+        {
+            if (child is not DummyNodeViewModel)
+            {
+                CollapseRecursive(child);
+            }
+        }
+        node.IsExpanded = false;
+    }
+
     private async void SearchBox_KeyDown(object? sender, KeyEventArgs e)
     {
         if (e.Key == Key.Enter && DataContext is MainViewModel vm)

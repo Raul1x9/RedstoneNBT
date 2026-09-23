@@ -23,8 +23,9 @@ namespace NBTExplorer.Model
         protected override void ExpandCore ()
         {
             var list = new SortedList<TagKey, TagNode>();
+            int idx = 0;
             foreach (var item in Tag) {
-                list.Add(new TagKey(item.Key, item.Value.GetTagType()), item.Value);
+                list.Add(new TagKey(item.Key, item.Value.GetTagType(), idx++), item.Value);
             }
 
             foreach (var item in list) {

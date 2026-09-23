@@ -106,6 +106,31 @@ public partial class MainViewModel : ViewModelBase
     public bool HasNodes => RootNodes.Count > 0;
     public bool HasNoNodes => RootNodes.Count == 0;
 
+    public bool IsSortContainersFirst => TagKey.SortMode == TagSortMode.ContainersFirst;
+    public bool IsSortAlphabetical => TagKey.SortMode == TagSortMode.Alphabetical;
+    public bool IsSortTagType => TagKey.SortMode == TagSortMode.TagType;
+    public bool IsSortFileOrder => TagKey.SortMode == TagSortMode.FileOrder;
+
+    [RelayCommand]
+    public void SetSortMode(string modeStr)
+    {
+        if (Enum.TryParse<TagSortMode>(modeStr, out var mode))
+        {
+            TagKey.SortMode = mode;
+            OnPropertyChanged(nameof(IsSortContainersFirst));
+            OnPropertyChanged(nameof(IsSortAlphabetical));
+            OnPropertyChanged(nameof(IsSortTagType));
+            OnPropertyChanged(nameof(IsSortFileOrder));
+
+            foreach (var root in RootNodes)
+            {
+                root.ReloadChildrenRecursive();
+            }
+
+            StatusMessage = $"Sort order: {mode}";
+        }
+    }
+
     #endregion
 
     public MainViewModel()

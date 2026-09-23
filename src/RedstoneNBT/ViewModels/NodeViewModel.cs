@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using Avalonia.Media;
@@ -299,10 +300,47 @@ public partial class NodeViewModel : ObservableObject
 
     public void ReloadChildren()
     {
+        _dataNode.Release();
         _isLoaded = false;
         Children.Clear();
         LoadChildren();
         RefreshDisplay();
+    }
+
+    public void ReloadChildrenRecursive()
+    {
+        if (!_isLoaded) return;
+        var expandedNames = new HashSet<string>();
+        CollectExpandedNames(this, expandedNames);
+
+        ReloadChildren();
+
+        RestoreExpandedNames(this, expandedNames);
+    }
+
+    private static void CollectExpandedNames(NodeViewModel node, HashSet<string> names)
+    {
+        if (node.IsExpanded && !string.IsNullOrEmpty(node.DisplayName))
+        {
+            names.Add(node.DisplayName);
+        }
+        foreach (var child in node.Children)
+        {
+            CollectExpandedNames(child, names);
+        }
+    }
+
+    private static void RestoreExpandedNames(NodeViewModel node, HashSet<string> names)
+    {
+        if (names.Contains(node.DisplayName))
+        {
+            node.IsExpanded = true;
+            node.LoadChildren();
+        }
+        foreach (var child in node.Children)
+        {
+            RestoreExpandedNames(child, names);
+        }
     }
 
     public void RefreshDisplay()

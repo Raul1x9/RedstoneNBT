@@ -25,6 +25,7 @@ Whether you are debugging custom worlds, inspecting chunk sections in Anvil `.mc
 
 ## ✨ Key Features & Modern Improvements
 
+- 🗂️ **Custom View & Authentic NBTExplorer Sorting**: Group containers first just like classic NBTExplorer (Compounds first, Lists second, Scalars third, Arrays fourth), or switch on the fly via the **View** menu to *Alphabetical*, *By Tag Type*, or *File Order*.
 - 📥 **Seamless Drag & Drop**: Drag and drop any Minecraft NBT files, region files, or entire world folders directly anywhere onto the window to open them immediately (single or multiple items simultaneously).
 - ⚡ **In-Place Inline Value Editing**: Click any scalar tag value (or press `Enter` / `F2`) to edit values directly within the tree view row — no more annoying modal popups for simple integer, float, or string adjustments.
 - 🎨 **Context-Aware Dynamic Toolbar**: Tools automatically gray out and disable when not applicable (e.g. invalid tag additions on typed lists, editing non-scalar containers, or saving when no changes exist).
@@ -73,31 +74,34 @@ Whether you are debugging custom worlds, inspecting chunk sections in Anvil `.mc
 
 ## 🚀 Installation & Downloads
 
-Pre-built standalone releases for all platforms are available on the [Releases Page](https://github.com/Raul1x9/RedstoneNBT/releases).
+Pre-compiled standalone releases for all major platforms and CPU architectures (x86_64 & ARM64) are available on the [GitHub Releases Page](https://github.com/Raul1x9/RedstoneNBT/releases).
 
 ### 🐧 Linux
 
-#### Option 1: Arch Linux (AUR / `yay`)
-Redstone NBT is packaged for Arch Linux:
-```bash
-# Using yay
-yay -S redstone-nbt-bin
+#### Option 1: Debian / Ubuntu (`.deb`)
+Download the `.deb` package matching your architecture:
+- **x86_64 (Intel/AMD)**: `redstone-nbt_1.0.0_amd64.deb`
+- **ARM64 (Raspberry Pi, Ampere, etc.)**: `redstone-nbt_1.0.0_arm64.deb`
 
-# Or manual PKGBUILD build:
-cd packaging/aur
-makepkg -si
-```
-
-#### Option 2: Debian / Ubuntu (`.deb` via `apt`)
-Download the `.deb` package from Releases and install via `apt`:
+Install using `apt`:
 ```bash
 sudo apt install ./redstone-nbt_1.0.0_amd64.deb
+# or on ARM64:
+# sudo apt install ./redstone-nbt_1.0.0_arm64.deb
 ```
+This automatically registers Redstone NBT in your desktop application launcher (GNOME, KDE Plasma, XFCE, etc.) with desktop icon and MIME file associations.
 
-#### Option 3: Standalone Portable Binary
+#### Option 2: Portable Tarball (`.tar.gz`)
+Works on any Linux distribution (Arch, Fedora, openSUSE, Debian, etc.):
 ```bash
+# For x86_64:
 tar -xzf redstone-nbt-1.0.0-linux-x64.tar.gz
 cd redstone-nbt-1.0.0-linux-x64
+./redstone-nbt
+
+# For ARM64:
+tar -xzf redstone-nbt-1.0.0-linux-arm64.tar.gz
+cd redstone-nbt-1.0.0-linux-arm64
 ./redstone-nbt
 ```
 
@@ -105,25 +109,25 @@ cd redstone-nbt-1.0.0-linux-x64
 
 ### 🪟 Windows
 
-1. Download `redstone-nbt-1.0.0-win-x64.zip` from the Releases page.
-2. Extract the archive anywhere on your PC.
-3. Launch `redstone-nbt.exe` (or `RedstoneNBT.exe`).
+Available for both 64-bit Intel/AMD and ARM64 Windows PCs:
+- **x86_64**: `redstone-nbt-1.0.0-win-x64.zip`
+- **ARM64**: `redstone-nbt-1.0.0-win-arm64.zip`
+
+1. Download the `.zip` archive for your CPU.
+2. Extract the folder anywhere on your computer.
+3. Double-click `redstone-nbt.exe` (or `RedstoneNBT.exe`) to launch immediately. No installer required!
 
 ---
 
 ### 🍎 macOS
 
-#### Option 1: Homebrew
-```bash
-brew tap Raul1x9/tap
-brew install redstone-nbt
-```
+Native application bundles (`.app`) packaged as archives:
+- **Apple Silicon (M1 / M2 / M3 / M4)**: `redstone-nbt-1.0.0-osx-arm64.tar.gz`
+- **Intel Macs (x86_64)**: `redstone-nbt-1.0.0-osx-x64.tar.gz`
 
-#### Option 2: Standalone Archive
-1. Download the archive matching your Mac's architecture:
-   - Apple Silicon (M1/M2/M3/M4): `redstone-nbt-1.0.0-osx-arm64.tar.gz`
-   - Intel Macs: `redstone-nbt-1.0.0-osx-x64.tar.gz`
-2. Extract the archive and launch `./redstone-nbt`.
+1. Download the archive for your Mac.
+2. Extract it to get `Redstone NBT.app`.
+3. Drag `Redstone NBT.app` to your `/Applications` folder and double-click to run.
 
 ---
 
