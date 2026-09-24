@@ -7,7 +7,6 @@
 ### Modern, High-Performance, Cross-Platform Minecraft NBT & World Editor
 
 [![GitHub Release](https://img.shields.io/github/v/release/Raul1x9/RedstoneNBT?color=brightgreen)](https://github.com/Raul1x9/RedstoneNBT/releases)
-[![Downloads](https://img.shields.io/github/downloads/Raul1x9/RedstoneNBT/total?color=blue)](https://github.com/Raul1x9/RedstoneNBT/releases)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](LICENSE)
 [![.NET](https://img.shields.io/badge/.NET-10.0-512BD4.svg)](https://dotnet.microsoft.com/)
 [![Avalonia UI](https://img.shields.io/badge/UI-Avalonia%2012-7052FF.svg)](https://avaloniaui.net/)
