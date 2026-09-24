@@ -177,6 +177,7 @@ To cross-compile and generate all release archives (`.tar.gz`, `.zip`, `.deb`):
 ## 📜 License & Credits
 
 - **Author & Maintainer**: Raul1x9 ([@Raul1x9](https://github.com/Raul1x9)) & Redstone NBT Contributors.
+- **Contributing**: See our **[Contributing Guide](CONTRIBUTING.md)** for issue reporting and pull request workflows.
 - **Original Upstream Author**: Justin Aquadro ([@jaquadro](https://github.com/jaquadro)), creator of the original [NBTExplorer](https://github.com/jaquadro/NBTExplorer) and [Substrate](https://github.com/jaquadro/Substrate) library (licensed under MIT).
 - **License**: Released under the **[GNU General Public License v3.0 (GPLv3)](LICENSE)**.
 
