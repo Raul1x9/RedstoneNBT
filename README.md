@@ -6,6 +6,8 @@
 
 ### Modern, High-Performance, Cross-Platform Minecraft NBT & World Editor
 
+[![GitHub Release](https://img.shields.io/github/v/release/Raul1x9/RedstoneNBT?color=brightgreen)](https://github.com/Raul1x9/RedstoneNBT/releases)
+[![Downloads](https://img.shields.io/github/downloads/Raul1x9/RedstoneNBT/total?color=blue)](https://github.com/Raul1x9/RedstoneNBT/releases)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](LICENSE)
 [![.NET](https://img.shields.io/badge/.NET-10.0-512BD4.svg)](https://dotnet.microsoft.com/)
 [![Avalonia UI](https://img.shields.io/badge/UI-Avalonia%2012-7052FF.svg)](https://avaloniaui.net/)
@@ -20,6 +22,22 @@
 **Redstone NBT** is a rejuvenated, desktop-grade Minecraft NBT and region file editor built from the ground up for modern operating systems. It is directly based on Justin Aquadro's legendary **NBTExplorer** and **Substrate** codebase, upgraded to **.NET 10** and **Avalonia UI** for cross-platform responsiveness on **Linux (Wayland & X11)**, **Windows 10/11**, and **macOS (Apple Silicon & Intel)**.
 
 Whether you are debugging custom worlds, inspecting chunk sections in Anvil `.mca` files, editing player data `.dat` files, or tweaking Bedrock `.mcstructure` templates, **Redstone NBT** delivers native performance with zero lag and modern UI ergonomics.
+
+---
+
+## 📸 Screenshots
+
+<div align="center">
+
+### Multi-View Editing: NBT Tags, Region Chunks (.mca), and World Folders
+<img src="docs/images/screenshot_multiview.png" alt="Redstone NBT Multi-view Editing" width="95%" />
+
+<br/><br/>
+
+### Sleek Dark Theme & Drag-and-Drop Drop Zone
+<img src="docs/images/screenshot_empty_dropzone.png" alt="Redstone NBT Drag and Drop Zone" width="95%" />
+
+</div>
 
 ---
 
