@@ -74,13 +74,19 @@ cp -a "${DIST_DIR}/linux-arm64/"* "/tmp/redstone-nbt-${VERSION}-linux-arm64/"
 tar -czf "${OUT_DIR}/redstone-nbt-${VERSION}-linux-arm64.tar.gz" -C "/tmp" "redstone-nbt-${VERSION}-linux-arm64"
 rm -rf "/tmp/redstone-nbt-${VERSION}-linux-arm64"
 
+# Linux x64 zip
+(cd "${DIST_DIR}/linux-x64" && zip -rq "${OUT_DIR}/redstone-nbt-${VERSION}-linux-x64.zip" .)
+
+# Linux arm64 zip
+(cd "${DIST_DIR}/linux-arm64" && zip -rq "${OUT_DIR}/redstone-nbt-${VERSION}-linux-arm64.zip" .)
+
 # Windows x64 zip
 (cd "${DIST_DIR}/win-x64" && zip -rq "${OUT_DIR}/redstone-nbt-${VERSION}-win-x64.zip" .)
 
 # Windows arm64 zip
 (cd "${DIST_DIR}/win-arm64" && zip -rq "${OUT_DIR}/redstone-nbt-${VERSION}-win-arm64.zip" .)
 
-# 5. Create macOS App Bundles (.app inside .tar.gz)
+# 5. Create macOS App Bundles (.app inside .tar.gz and .zip)
 echo "[5/6] Packaging macOS Application Bundles (.app)..."
 
 create_macos_app() {
@@ -123,6 +129,7 @@ create_macos_app() {
 EOF
 
     tar -czf "${OUT_DIR}/redstone-nbt-${VERSION}-osx-${ARCH}.tar.gz" -C "/tmp" "Redstone NBT.app"
+    (cd /tmp && zip -rq "${OUT_DIR}/redstone-nbt-${VERSION}-osx-${ARCH}.zip" "Redstone NBT.app")
     rm -rf "${APP_DIR}"
 }
 
