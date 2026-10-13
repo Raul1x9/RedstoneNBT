@@ -193,6 +193,8 @@ public partial class MainViewModel : ViewModelBase
                 var vm = new NodeViewModel(node);
                 RootNodes.Add(vm);
                 SelectedNode = vm;
+                vm.IsExpanded = true;
+                vm.LoadChildren();
                 ShowSearchResults = false;
                 SearchResults.Clear();
                 StatusMessage = $"Opened: {Path.GetFileName(filePath)}";
@@ -219,6 +221,9 @@ public partial class MainViewModel : ViewModelBase
             var node = new DirectoryDataNode(folderPath);
             var vm = new NodeViewModel(node);
             RootNodes.Add(vm);
+            SelectedNode = vm;
+            vm.IsExpanded = true;
+            vm.LoadChildren();
             ShowSearchResults = false;
             SearchResults.Clear();
             StatusMessage = $"Opened folder: {Path.GetFileName(folderPath)}";
