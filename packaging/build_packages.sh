@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -e
 
-VERSION="1.0.1"
+VERSION="1.0.2"
 PROJECT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 DIST_DIR="${PROJECT_ROOT}/dist"
 OUT_DIR="${DIST_DIR}/releases"
@@ -27,35 +27,35 @@ cp "${PROJECT_ROOT}/src/RedstoneNBT/Assets/redstone-nbt.png" "${DIST_DIR}/linux-
 cp "${PROJECT_ROOT}/src/RedstoneNBT/Assets/redstone-nbt.ico" "${DIST_DIR}/linux-arm64/"
 cp "${PROJECT_ROOT}/LICENSE" "${DIST_DIR}/linux-arm64/"
 
-# 2. Compile Windows (x64 and arm64)
-echo "[2/6] Compiling Windows x64 and ARM64..."
+# 2. Compile Windows (x64 and arm64) - Self-Contained
+echo "[2/6] Compiling Windows x64 and ARM64 (Self-Contained)..."
 rm -rf "${DIST_DIR}/win-x64" "${DIST_DIR}/win-arm64"
 
-dotnet publish "${PROJECT_ROOT}/src/RedstoneNBT/RedstoneNBT.csproj" -c Release -r win-x64 --self-contained false -o "${DIST_DIR}/win-x64"
+dotnet publish "${PROJECT_ROOT}/src/RedstoneNBT/RedstoneNBT.csproj" -c Release -r win-x64 --self-contained true -o "${DIST_DIR}/win-x64"
 cp "${PROJECT_ROOT}/src/RedstoneNBT/Assets/redstone-nbt.ico" "${DIST_DIR}/win-x64/"
 cp "${PROJECT_ROOT}/src/RedstoneNBT/Assets/redstone-nbt.png" "${DIST_DIR}/win-x64/"
 cp "${PROJECT_ROOT}/LICENSE" "${DIST_DIR}/win-x64/"
 cp "${DIST_DIR}/win-x64/RedstoneNBT.exe" "${DIST_DIR}/win-x64/redstone-nbt.exe"
 
-dotnet publish "${PROJECT_ROOT}/src/RedstoneNBT/RedstoneNBT.csproj" -c Release -r win-arm64 --self-contained false -o "${DIST_DIR}/win-arm64"
+dotnet publish "${PROJECT_ROOT}/src/RedstoneNBT/RedstoneNBT.csproj" -c Release -r win-arm64 --self-contained true -o "${DIST_DIR}/win-arm64"
 cp "${PROJECT_ROOT}/src/RedstoneNBT/Assets/redstone-nbt.ico" "${DIST_DIR}/win-arm64/"
 cp "${PROJECT_ROOT}/src/RedstoneNBT/Assets/redstone-nbt.png" "${DIST_DIR}/win-arm64/"
 cp "${PROJECT_ROOT}/LICENSE" "${DIST_DIR}/win-arm64/"
 cp "${DIST_DIR}/win-arm64/RedstoneNBT.exe" "${DIST_DIR}/win-arm64/redstone-nbt.exe"
 
-# 3. Compile macOS (x64 Intel and arm64 Apple Silicon)
-echo "[3/6] Compiling macOS Intel (x64) and Apple Silicon (arm64)..."
+# 3. Compile macOS (x64 Intel and arm64 Apple Silicon) - Self-Contained
+echo "[3/6] Compiling macOS Intel (x64) and Apple Silicon (arm64) (Self-Contained)..."
 rm -rf "${DIST_DIR}/osx-x64" "${DIST_DIR}/osx-arm64"
 
-dotnet publish "${PROJECT_ROOT}/src/RedstoneNBT/RedstoneNBT.csproj" -c Release -r osx-x64 --self-contained false -o "${DIST_DIR}/osx-x64"
+dotnet publish "${PROJECT_ROOT}/src/RedstoneNBT/RedstoneNBT.csproj" -c Release -r osx-x64 --self-contained true -o "${DIST_DIR}/osx-x64"
 cp "${PROJECT_ROOT}/src/RedstoneNBT/Assets/redstone-nbt.png" "${DIST_DIR}/osx-x64/"
+cp "${PROJECT_ROOT}/src/RedstoneNBT/Assets/redstone-nbt.icns" "${DIST_DIR}/osx-x64/"
 cp "${PROJECT_ROOT}/LICENSE" "${DIST_DIR}/osx-x64/"
-(cd "${DIST_DIR}/osx-x64" && ln -sf RedstoneNBT redstone-nbt)
 
-dotnet publish "${PROJECT_ROOT}/src/RedstoneNBT/RedstoneNBT.csproj" -c Release -r osx-arm64 --self-contained false -o "${DIST_DIR}/osx-arm64"
+dotnet publish "${PROJECT_ROOT}/src/RedstoneNBT/RedstoneNBT.csproj" -c Release -r osx-arm64 --self-contained true -o "${DIST_DIR}/osx-arm64"
 cp "${PROJECT_ROOT}/src/RedstoneNBT/Assets/redstone-nbt.png" "${DIST_DIR}/osx-arm64/"
+cp "${PROJECT_ROOT}/src/RedstoneNBT/Assets/redstone-nbt.icns" "${DIST_DIR}/osx-arm64/"
 cp "${PROJECT_ROOT}/LICENSE" "${DIST_DIR}/osx-arm64/"
-(cd "${DIST_DIR}/osx-arm64" && ln -sf RedstoneNBT redstone-nbt)
 
 # 4. Create standalone tar.gz and zip archives
 echo "[4/6] Archiving Linux and Windows release archives..."
@@ -98,8 +98,20 @@ create_macos_app() {
     mkdir -p "${APP_DIR}/Contents/Resources"
 
     cp -a "${SRC_DIR}/"* "${APP_DIR}/Contents/MacOS/"
+
+    # Remove non-app asset copies from MacOS binary directory
+    rm -f "${APP_DIR}/Contents/MacOS/redstone-nbt"
+    rm -f "${APP_DIR}/Contents/MacOS/redstone-nbt.png"
+    rm -f "${APP_DIR}/Contents/MacOS/redstone-nbt.icns"
+    rm -f "${APP_DIR}/Contents/MacOS/LICENSE"
+
+    # Set proper executable permissions on main binary and dynamic libraries
     chmod +x "${APP_DIR}/Contents/MacOS/RedstoneNBT"
-    cp "${PROJECT_ROOT}/src/RedstoneNBT/Assets/redstone-nbt.png" "${APP_DIR}/Contents/Resources/"
+    chmod +x "${APP_DIR}/Contents/MacOS/"*.dylib 2>/dev/null || true
+
+    # Copy icons into Contents/Resources
+    cp "${PROJECT_ROOT}/src/RedstoneNBT/Assets/redstone-nbt.icns" "${APP_DIR}/Contents/Resources/redstone-nbt.icns"
+    cp "${PROJECT_ROOT}/src/RedstoneNBT/Assets/redstone-nbt.png" "${APP_DIR}/Contents/Resources/redstone-nbt.png"
 
     cat <<EOF > "${APP_DIR}/Contents/Info.plist"
 <?xml version="1.0" encoding="UTF-8"?>
@@ -122,6 +134,14 @@ create_macos_app() {
     <string>APPL</string>
     <key>CFBundleSignature</key>
     <string>????</string>
+    <key>CFBundleIconFile</key>
+    <string>redstone-nbt.icns</string>
+    <key>NSPrincipalClass</key>
+    <string>NSApplication</string>
+    <key>LSMinimumSystemVersion</key>
+    <string>10.15</string>
+    <key>CFBundleInfoDictionaryVersion</key>
+    <string>6.0</string>
     <key>NSHighResolutionCapable</key>
     <true/>
 </dict>
@@ -190,6 +210,6 @@ build_deb "arm64" "${DIST_DIR}/linux-arm64"
 
 echo ""
 echo "==========================================================="
-echo " All 8 Release Packages Created Successfully in dist/releases/ "
+echo " All Release Packages Created Successfully in dist/releases/ "
 echo "==========================================================="
 ls -lh "${OUT_DIR}"

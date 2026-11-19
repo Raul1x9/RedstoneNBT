@@ -9,6 +9,9 @@
     <AssemblyName>RedstoneNBT</AssemblyName>
     <RootNamespace>RedstoneNBT</RootNamespace>
     <Title>Redstone NBT</Title>
+    <Version>1.0.2</Version>
+    <AssemblyVersion>1.0.2.0</AssemblyVersion>
+    <FileVersion>1.0.2.0</FileVersion>
     <Description>Modern Cross-Platform Minecraft NBT Editor</Description>
     <ApplicationIcon>Assets/redstone-nbt.ico</ApplicationIcon>
   </PropertyGroup>

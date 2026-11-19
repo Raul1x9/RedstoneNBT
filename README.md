@@ -97,28 +97,28 @@ Pre-compiled standalone releases for all major platforms and CPU architectures (
 
 #### Option 1: Debian / Ubuntu (`.deb`)
 Download the `.deb` package matching your architecture:
-- **x86_64 (Intel/AMD)**: `redstone-nbt_1.0.0_amd64.deb`
-- **ARM64 (Raspberry Pi, Ampere, etc.)**: `redstone-nbt_1.0.0_arm64.deb`
+- **x86_64 (Intel/AMD)**: `redstone-nbt_1.0.2_amd64.deb`
+- **ARM64 (Raspberry Pi, Ampere, etc.)**: `redstone-nbt_1.0.2_arm64.deb`
 
 Install using `apt`:
 ```bash
-sudo apt install ./redstone-nbt_1.0.0_amd64.deb
+sudo apt install ./redstone-nbt_1.0.2_amd64.deb
 # or on ARM64:
-# sudo apt install ./redstone-nbt_1.0.0_arm64.deb
+# sudo apt install ./redstone-nbt_1.0.2_arm64.deb
 ```
 This automatically registers Redstone NBT in your desktop application launcher (GNOME, KDE Plasma, XFCE, etc.) with desktop icon and MIME file associations.
 
-#### Option 2: Portable Tarball (`.tar.gz`)
+#### Option 2: Portable Tarball (`.tar.gz`) or Zip (`.zip`)
 Works on any Linux distribution (Arch, Fedora, openSUSE, Debian, etc.):
 ```bash
 # For x86_64:
-tar -xzf redstone-nbt-1.0.0-linux-x64.tar.gz
-cd redstone-nbt-1.0.0-linux-x64
+tar -xzf redstone-nbt-1.0.2-linux-x64.tar.gz
+cd redstone-nbt-1.0.2-linux-x64
 ./redstone-nbt
 
 # For ARM64:
-tar -xzf redstone-nbt-1.0.0-linux-arm64.tar.gz
-cd redstone-nbt-1.0.0-linux-arm64
+tar -xzf redstone-nbt-1.0.2-linux-arm64.tar.gz
+cd redstone-nbt-1.0.2-linux-arm64
 ./redstone-nbt
 ```
 
@@ -126,25 +126,37 @@ cd redstone-nbt-1.0.0-linux-arm64
 
 ### 🪟 Windows
 
-Available for both 64-bit Intel/AMD and ARM64 Windows PCs:
-- **x86_64**: `redstone-nbt-1.0.0-win-x64.zip`
-- **ARM64**: `redstone-nbt-1.0.0-win-arm64.zip`
+Self-contained portable builds available for both 64-bit Intel/AMD and ARM64 Windows PCs:
+- **x86_64**: `redstone-nbt-1.0.2-win-x64.zip`
+- **ARM64**: `redstone-nbt-1.0.2-win-arm64.zip`
 
-1. Download the `.zip` archive for your CPU.
+1. Download the `.zip` archive for your CPU architecture.
 2. Extract the folder anywhere on your computer.
-3. Double-click `redstone-nbt.exe` (or `RedstoneNBT.exe`) to launch immediately. No installer required!
+3. Double-click `redstone-nbt.exe` (or `RedstoneNBT.exe`) to launch immediately. No .NET runtime or installer required!
 
 ---
 
 ### 🍎 macOS
 
-Native application bundles (`.app`) packaged as archives:
-- **Apple Silicon (M1 / M2 / M3 / M4)**: `redstone-nbt-1.0.0-osx-arm64.tar.gz`
-- **Intel Macs (x86_64)**: `redstone-nbt-1.0.0-osx-x64.tar.gz`
+Self-contained native application bundles (`Redstone NBT.app`) available in `.tar.gz` and `.zip` format:
+- **Apple Silicon (M1 / M2 / M3 / M4)**: `redstone-nbt-1.0.2-osx-arm64.tar.gz` (or `.zip`)
+- **Intel Macs (x86_64)**: `redstone-nbt-1.0.2-osx-x64.tar.gz` (or `.zip`)
 
-1. Download the archive for your Mac.
-2. Extract it to get `Redstone NBT.app`.
-3. Drag `Redstone NBT.app` to your `/Applications` folder and double-click to run.
+#### Installation:
+1. Download the archive for your Mac (`arm64` for Apple Silicon or `x64` for Intel).
+2. Extract the archive to get `Redstone NBT.app`.
+3. Move `Redstone NBT.app` to your `/Applications` folder.
+
+> [!NOTE]
+> **First-Time Launch on macOS (Apple Gatekeeper)**:
+> Because Redstone NBT is a community open-source project and not signed with a paid Apple Developer certificate, macOS Gatekeeper may show *"Redstone NBT is damaged and can't be opened"* or block execution upon first launch.
+> 
+> To clear the quarantine flag and launch the application:
+> 1. Open **Terminal** and run:
+>    ```bash
+>    xattr -dr com.apple.quarantine "/Applications/Redstone NBT.app"
+>    ```
+> 2. Or **Control-click (Right-click)** `Redstone NBT.app` in Finder, select **Open**, and confirm **Open** (on macOS Sequoia / Sonoma, you can also go to **System Settings > Privacy & Security** and click **Open Anyway**).
 
 ---
 
